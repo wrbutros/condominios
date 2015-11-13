@@ -69,7 +69,7 @@ class Edificio(models.Model):
     condominio=models.ForeignKey(Condominio)
 
     def __str__(self):
-        return str(self.numero)
+        return str(self.nombre)
 
 
 class Departamento(models.Model):
