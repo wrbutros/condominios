@@ -75,8 +75,8 @@ class Edificio(models.Model):
 class Departamento(models.Model):
     numero=models.IntegerField()
     metrosCuadrados=models.CharField(max_length=100)
-    cantidadBanos=models.IntegerField()
-    cantidadPiezas=models.IntegerField()
+    cantidadBanos=models.IntegerField(default=1)
+    cantidadPiezas=models.IntegerField(default=1)
     walkInCloset=models.BooleanField(default=True)
     edificio=models.ForeignKey(Edificio)
 
@@ -142,7 +142,7 @@ class DepartamentoAdmin(admin.ModelAdmin):
     list_display=['numero', 'metrosCuadrados', 'cantidadBanos',
                   'cantidadPiezas', 'walkInCloset', 'get_nombre_edificio']
     list_filter=['numero', 'metrosCuadrados', 'cantidadBanos',
-                 'cantidadPiezas', 'walkInCloset', 'get_nombre_edificio']
+                 'cantidadPiezas', 'walkInCloset'] #hay que filtrar edificio
     search_fields=['numero', 'metrosCuadrados', 'cantidadBanos',
                   'cantidadPiezas', 'walkInCloset', 'get_nombre_edificio']
 
@@ -152,13 +152,12 @@ class DepartamentoAdmin(admin.ModelAdmin):
     get_nombre_edificio.admin_order_field  = 'edificio'  #Allows column order sorting
     get_nombre_edificio.short_description  = 'Edificio'  #Renames column head
 
-
 class CondominioAdmin(admin.ModelAdmin):
     model=Condominio
     list_display=('nombre', 'fono', 'direccion', 'ciudad',
                   'comuna', 'get_nombre_empresa')
     list_filter=('nombre', 'fono', 'direccion', 'ciudad',
-                 'comuna', 'get_nombre_empresa')
+                 'comuna') #hay que filtrar empresa
     search_fields=('nombre', 'fono', 'direccion', 'ciudad',
                    'comuna', 'get_nombre_empresa')
 
@@ -171,7 +170,7 @@ class CondominioAdmin(admin.ModelAdmin):
 class EdificioAdmin(admin.ModelAdmin):
     model=Edificio
     list_display=('nombre', 'cantidadPisos', 'get_nombre_condominio')
-    list_filter=('nombre', 'cantidadPisos', 'get_nombre_condominio')
+    list_filter=('nombre', 'cantidadPisos') #hay que filtrat condominio
     search_fields=('nombre', 'cantidadPisos', 'get_nombre_condominio')
 
     def get_nombre_condominio(self, obj):
@@ -189,8 +188,8 @@ class ConserjeAdmin(admin.ModelAdmin):
                   'activo')
     list_filter=('rut', 'nombres', 'apellido_paterno',
                   'apellido_materno', 'genero', 'fono',
-                  'email', 'direccion', 'get_nombre_comuna',
-                  'get_nombre_ciudad', 'departamento', 'turno',
+                  'email', 'direccion', #hay que filtrar comuna
+                  'departamento', 'turno', #hay que filtrar ciudad
                   'activo')
     search_fields=('rut', 'nombres', 'apellido_paterno',
                   'apellido_materno', 'genero', 'fono',
@@ -213,11 +212,10 @@ class ConserjeAdmin(admin.ModelAdmin):
 class ContratoAdmin(admin.ModelAdmin):
     model=Contrato
     list_display=('get_numero_departamento', 'get_nombre_residente',
-                  'fecha_inicio, fecha_termino', 'tipo')
-    list_filter=('get_numero_departamento', 'get_nombre_residente',
-                  'fecha_inicio, fecha_termino', 'tipo')
+                  'fecha_inicio', 'fecha_termino', 'tipo')
+    list_filter=('fecha_inicio', 'fecha_termino', 'tipo') #hay que agregar filtro residente y departamento
     search_fields = ('get_numero_departamento', 'get_nombre_residente',
-                     'fecha_inicio, fecha_termino', 'tipo')
+                     'fecha_inicio', 'fecha_termino', 'tipo')
 
     def get_numero_departamento(self, obj):
         return obj.departamento.numero
@@ -238,8 +236,8 @@ class AdministradorEdificioAdmin(admin.ModelAdmin):
                   'fono', 'email', 'direccion', 'get_nombre_comuna',
                   'get_nombre_ciudad', 'url')
     list_filter=('nombreEmpresa','rutEmpresa', 'razonSocial',
-                  'fono', 'email', 'direccion', 'get_nombre_comuna',
-                  'get_nombre_ciudad', 'url')
+                  'fono', 'email', 'direccion', #hay que agregar filtro comuna
+                  'url') #hay que filtrar ciudad
     search_fields=('nombreEmpresa','rutEmpresa', 'razonSocial',
                   'fono', 'email', 'direccion', 'get_nombre_comuna',
                   'get_nombre_ciudad', 'url')
