@@ -96,7 +96,7 @@ class Contrato(models.Model):
     tipo=models.CharField(max_length=1, choices=RESIDENT_CHOICES)
 
     def __str__(self):
-        return str(self.departamento__numero)
+        return str(self.tipo)
 
 
 class Conserje(models.Model):
