@@ -224,7 +224,7 @@ class ContratoAdmin(admin.ModelAdmin):
     get_numero_departamento.short_description  = 'Depto'  #Renames column head
 
     def get_nombre_residente(self, obj):
-        return obj.residente.nombre
+        return obj.residente.nombres
 
     get_nombre_residente.admin_order_field  = 'residente'  #Allows column order sorting
     get_nombre_residente.short_description  = 'Residente'  #Renames column head
