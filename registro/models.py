@@ -5,6 +5,9 @@ from django.contrib import admin
 class Ciudad(models.Model):
     nombre=models.CharField(max_length=50)
 
+    class Meta:
+        verbose_name_plural = "Ciudades"
+
     def __str__(self):
         return str(self.nombre)
 
@@ -30,6 +33,7 @@ class Residente(models.Model):
     fono=models.IntegerField()
     email=models.CharField(max_length=50)
     fecha_ingreso=models.DateTimeField()
+    activo=models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombres
@@ -50,6 +54,32 @@ class AdministradorEdificio(models.Model):
         return str(self.nombreEmpresa)
 
 
+class Conserje(models.Model):
+    rut=models.CharField(max_length=13)
+    nombres=models.CharField(max_length=100)
+    apellido_paterno=models.CharField(max_length=100)
+    apellido_materno=models.CharField(max_length=100)
+    GENDER_CHOICES = (
+        ('M', 'Masculino'),
+        ('F', 'Femenino'),
+    )
+    genero=models.CharField(max_length=1, choices=GENDER_CHOICES)
+    fono=models.IntegerField()
+    email=models.CharField(max_length=50)
+    direccion=models.CharField(max_length=50)
+    comuna=models.ForeignKey(Comuna)
+    ciudad=models.ForeignKey(Ciudad)
+    #    TURN_CHOICES = (
+    #        ('D', 'Diurno'),
+    #        ('N', 'Nocturno'),
+    #    )
+    #    turno=models.CharField(max_length=1, choices=TURN_CHOICES)
+    activo=models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nombres
+
+
 class Condominio(models.Model):
     nombre=models.CharField(max_length=50)
     fono=models.IntegerField()
@@ -58,6 +88,7 @@ class Condominio(models.Model):
     ciudad=models.ForeignKey(Ciudad)
     comuna=models.ForeignKey(Comuna)
     administradorEdificio=models.ForeignKey(AdministradorEdificio)
+    conserjes=models.ManyToManyField(Conserje, related_name='condominios')
 
     def __str__(self):
         return str(self.nombre)
@@ -88,43 +119,19 @@ class Contrato(models.Model):
     departamento=models.ForeignKey(Departamento)
     residente=models.ForeignKey(Residente)
     fecha_inicio=models.DateTimeField()
-    fecha_termino=models.DateTimeField()
+    fecha_termino=models.DateTimeField(blank=True)
     RESIDENT_CHOICES = (
         ('P', 'Propietario'),
         ('A', 'Arrendatario'),
     )
     tipo=models.CharField(max_length=1, choices=RESIDENT_CHOICES)
+    activo=models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.tipo)
 
 
-class Conserje(models.Model):
-    rut=models.CharField(max_length=13)
-    nombres=models.CharField(max_length=100)
-    apellido_paterno=models.CharField(max_length=100)
-    apellido_materno=models.CharField(max_length=100)
-    GENDER_CHOICES = (
-        ('M', 'Masculino'),
-        ('F', 'Femenino'),
-    )
-    genero=models.CharField(max_length=1, choices=GENDER_CHOICES)
-    fono=models.IntegerField()
-    email=models.CharField(max_length=50)
-    direccion=models.CharField(max_length=50)
-    comuna=models.ForeignKey(Comuna)
-    ciudad=models.ForeignKey(Ciudad)
-    departamento=models.ForeignKey(Departamento)
-    TURN_CHOICES = (
-        ('D', 'Diurno'),
-        ('N', 'Nocturno'),
-    )
-    turno=models.CharField(max_length=1, choices=TURN_CHOICES)
-    activo=models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.nombres
-
+##  ====== RESIDENTE =======
 class ResidenteAdmin(admin.ModelAdmin):
     model=Residente
     list_display=('rut', 'nombres', 'apellido_paterno',
@@ -137,6 +144,7 @@ class ResidenteAdmin(admin.ModelAdmin):
                    'apellido_materno', 'genero', 'fono',
                    'email','fecha_ingreso')
 
+##  ====== DEPARTAMENTO =======
 class DepartamentoAdmin(admin.ModelAdmin):
     model=Departamento
     list_display=['numero', 'metrosCuadrados', 'cantidadBanos',
@@ -152,50 +160,28 @@ class DepartamentoAdmin(admin.ModelAdmin):
     get_nombre_edificio.admin_order_field  = 'edificio'  #Allows column order sorting
     get_nombre_edificio.short_description  = 'Edificio'  #Renames column head
 
-class CondominioAdmin(admin.ModelAdmin):
-    model=Condominio
-    list_display=('nombre', 'fono', 'direccion', 'ciudad',
-                  'comuna', 'get_nombre_empresa')
-    list_filter=('nombre', 'fono', 'direccion', 'ciudad',
-                 'comuna') #hay que filtrar empresa
-    search_fields=('nombre', 'fono', 'direccion', 'ciudad',
-                   'comuna', 'get_nombre_empresa')
+##  ====== CONSERJE-CONDOMINIO =======
+class ConserjeCondominioInline(admin.TabularInline):
+    model = Condominio.conserjes.through
 
-    def get_nombre_empresa(self, obj):
-        return obj.administradorEdificio.nombreEmpresa
-
-    get_nombre_empresa.admin_order_field  = 'administradorEdificio'  #Allows column order sorting
-    get_nombre_empresa.short_description  = 'Empresa'  #Renames column head
-
-class EdificioAdmin(admin.ModelAdmin):
-    model=Edificio
-    list_display=('nombre', 'cantidadPisos', 'get_nombre_condominio')
-    list_filter=('nombre', 'cantidadPisos') #hay que filtrat condominio
-    search_fields=('nombre', 'cantidadPisos', 'get_nombre_condominio')
-
-    def get_nombre_condominio(self, obj):
-        return obj.condominio.nombre
-
-    get_nombre_condominio.admin_order_field  = 'condominio'  #Allows column order sorting
-    get_nombre_condominio.short_description  = 'Condominio'  #Renames column head
-
+##  ====== CONSERJE =======
 class ConserjeAdmin(admin.ModelAdmin):
     model=Conserje
+    inlines = [
+        ConserjeCondominioInline,
+    ]
     list_display=('rut', 'nombres', 'apellido_paterno',
                   'apellido_materno', 'genero', 'fono',
                   'email', 'direccion', 'get_nombre_comuna',
-                  'get_nombre_ciudad', 'departamento', 'turno',
-                  'activo')
+                  'get_nombre_ciudad','activo')
     list_filter=('rut', 'nombres', 'apellido_paterno',
                   'apellido_materno', 'genero', 'fono',
-                  'email', 'direccion', #hay que filtrar comuna
-                  'departamento', 'turno', #hay que filtrar ciudad
+                  'email', 'direccion', #hay que filtrar comuna, ciudad
                   'activo')
     search_fields=('rut', 'nombres', 'apellido_paterno',
-                  'apellido_materno', 'genero', 'fono',
-                  'email', 'direccion', 'get_nombre_comuna',
-                  'get_nombre_ciudad', 'departamento', 'turno',
-                  'activo')
+                   'apellido_materno', 'genero', 'fono',
+                   'email', 'direccion', 'get_nombre_comuna',
+                   'get_nombre_ciudad','activo')
 
     def get_nombre_comuna(self, obj):
         return obj.comuna.nombre
@@ -209,6 +195,41 @@ class ConserjeAdmin(admin.ModelAdmin):
     get_nombre_ciudad.admin_order_field  = 'ciudad'  #Allows column order sorting
     get_nombre_ciudad.short_description  = 'Ciudad'  #Renames column head
 
+
+##  ====== CONDOMINIO =======
+class CondominioAdmin(admin.ModelAdmin):
+    model=Condominio
+    inlines = [
+        ConserjeCondominioInline,
+    ]
+    exlude = ('condominios',)
+    list_display=('nombre', 'fono', 'direccion', 'ciudad',
+                  'comuna', 'get_nombre_empresa')
+    list_filter=('nombre', 'fono', 'direccion', 'ciudad',
+                 'comuna') #hay que filtrar empresa
+    search_fields=('nombre', 'fono', 'direccion', 'ciudad',
+                   'comuna', 'get_nombre_empresa')
+
+    def get_nombre_empresa(self, obj):
+        return obj.administradorEdificio.nombreEmpresa
+
+    get_nombre_empresa.admin_order_field  = 'administradorEdificio'  #Allows column order sorting
+    get_nombre_empresa.short_description  = 'Empresa'  #Renames column head
+
+##  ====== EDIFICIO =======
+class EdificioAdmin(admin.ModelAdmin):
+    model=Edificio
+    list_display=('nombre', 'cantidadPisos', 'get_nombre_condominio')
+    list_filter=('nombre', 'cantidadPisos') #hay que filtrat condominio
+    search_fields=('nombre', 'cantidadPisos', 'get_nombre_condominio')
+
+    def get_nombre_condominio(self, obj):
+        return obj.condominio.nombre
+
+    get_nombre_condominio.admin_order_field  = 'condominio'  #Allows column order sorting
+    get_nombre_condominio.short_description  = 'Condominio'  #Renames column head
+
+##  ====== CONTRATO =======
 class ContratoAdmin(admin.ModelAdmin):
     model=Contrato
     list_display=('get_numero_departamento', 'get_nombre_residente',
@@ -230,6 +251,7 @@ class ContratoAdmin(admin.ModelAdmin):
     get_nombre_residente.short_description  = 'Residente'  #Renames column head
 
 
+##  ====== ADMINISTRADOR EDIFICIO =======
 class AdministradorEdificioAdmin(admin.ModelAdmin):
     model=AdministradorEdificio
     list_display=('nombreEmpresa','rutEmpresa', 'razonSocial',
@@ -254,12 +276,14 @@ class AdministradorEdificioAdmin(admin.ModelAdmin):
     get_nombre_ciudad.admin_order_field  = 'ciudad'  #Allows column order sorting
     get_nombre_ciudad.short_description  = 'Ciudad'  #Renames column head
 
+##  ====== CIUDAD =======
 class CiudadAdmin(admin.ModelAdmin):
     model=Ciudad
     list_display=('nombre',)
     list_filter=('nombre',) #hay que filtrar ciudad
     search_fields=('nombre',)
 
+##  ====== COMUNA =======
 class ComunaAdmin(admin.ModelAdmin):
     model=Comuna
     list_display=('nombre', 'get_nombre_ciudad')
@@ -268,7 +292,6 @@ class ComunaAdmin(admin.ModelAdmin):
 
     def get_nombre_ciudad(self, obj):
         return obj.ciudad.nombre
-
 
 admin.site.register(Residente, ResidenteAdmin)
 admin.site.register(Departamento, DepartamentoAdmin)
