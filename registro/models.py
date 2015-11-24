@@ -7,8 +7,8 @@ class Ciudad(models.Model):
     class Meta:
         verbose_name_plural = "Ciudades"
 
-    def __str__(self):
-        return str(self.nombre)
+    def __unicode__(self):
+        return self.nombre
 
 
 class Comuna(models.Model):
