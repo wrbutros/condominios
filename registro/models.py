@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxLengthValidator
 
 
 class Ciudad(models.Model):
@@ -17,6 +18,28 @@ class Comuna(models.Model):
 
     def __str__(self):
         return str(self.nombre)
+
+
+class GrupoGasto(models.Model):
+    nombre = models.CharField(max_length=50)
+    activo = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name_plural = "GruposGasto"
+
+    def __unicode__(self):
+        return self.nombre
+
+class TipoGasto(models.Model):
+    nombre = models.CharField(max_length=50)
+    activo = models.BooleanField(default=True)
+    grupoGasto = models.ForeignKey(GrupoGasto)
+
+    class Meta:
+        verbose_name_plural = "TiposGasto"
+
+    def __unicode__(self):
+        return self.nombre
 
 
 class Residente(models.Model):
@@ -91,6 +114,19 @@ class Condominio(models.Model):
 
     def __str__(self):
         return str(self.nombre)
+
+
+class GastoCondominio(models.Model):
+    grupoGasto = models.ForeignKey(GrupoGasto)
+    tipoGasto = models.ForeignKey(TipoGasto)
+    condominio = models.ForeignKey(Condominio)
+    egreso = models.CharField(max_length=50)
+    descripcion =  models.TextField(validators=[MaxLengthValidator(500)])
+    fecha = models.DateTimeField()
+    valor = models.IntegerField()
+
+    def __str__(self):
+        return str(self.valor)
 
 
 class Edificio(models.Model):

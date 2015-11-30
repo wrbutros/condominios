@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Residente, Departamento, Condominio, Conserje
 from .models import Contrato, Ciudad, Comuna, Edificio, AdministradorEdificio
+from .models import GrupoGasto, TipoGasto, GastoCondominio
 
 
 ##  ====== RESIDENTE =======
@@ -175,6 +176,44 @@ class ComunaAdmin(admin.ModelAdmin):
         return obj.ciudad.nombre
 
 
+##  ====== GRUPO GASTO =======
+class GrupoGastoAdmin(admin.ModelAdmin):
+    model = GrupoGasto
+    list_display = ('nombre', 'activo')
+    list_filter = ('nombre', 'activo')
+    search_fields = ('nombre', 'activo')
+
+
+##  ====== GASTO =======
+class TipoGastoAdmin(admin.ModelAdmin):
+    model = TipoGasto
+    list_display = ('nombre', 'activo', 'get_grupo_gasto')
+    list_filter = ('nombre', 'activo')
+    search_fields = ('nombre', 'activo', 'get_grupo_gasto')
+
+    def get_grupo_gasto(self, obj):
+        return obj.grupoGasto.nombre
+
+
+##  ====== GASTO CONDOMINIO =======
+class GastoCondominioAdmin(admin.ModelAdmin):
+    model = GastoCondominio
+    list_display = ('get_grupo_gasto', 'get_tipo_gasto', 'get_condominio',
+                    'egreso', 'descripcion', 'fecha', 'valor')
+    list_filter = ('egreso', 'descripcion', 'fecha', 'valor')
+    search_fields = ('get_grupo_gasto', 'get_tipo_gasto', 'get_condominio',
+                    'egreso', 'descripcion', 'fecha', 'valor')
+
+    def get_grupo_gasto(self, obj):
+        return obj.grupoGasto.nombre
+
+    def get_tipo_gasto(self, obj):
+        return obj.tipoGasto.nombre
+
+    def get_condominio(self, obj):
+        return obj.condominio.nombre
+
+
 admin.site.register(Residente, ResidenteAdmin)
 admin.site.register(Departamento, DepartamentoAdmin)
 admin.site.register(Condominio, CondominioAdmin)
@@ -184,3 +223,7 @@ admin.site.register(Contrato, ContratoAdmin)
 admin.site.register(AdministradorEdificio, AdministradorEdificioAdmin)
 admin.site.register(Ciudad, CiudadAdmin)
 admin.site.register(Comuna, ComunaAdmin)
+
+admin.site.register(GrupoGasto, GrupoGastoAdmin)
+admin.site.register(TipoGasto, TipoGastoAdmin)
+admin.site.register(GastoCondominio, GastoCondominioAdmin)
