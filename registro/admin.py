@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Residente, Departamento, Condominio, Conserje
 from .models import Contrato, Ciudad, Comuna, Edificio, AdministradorEdificio
 from .models import GrupoGasto, TipoGasto, GastoCondominio
+from .models import Estacionamiento, Comite, CargoComite, Bodega
 
 
 ##  ====== RESIDENTE =======
@@ -45,8 +46,8 @@ class EstacionamientoAdmin(admin.ModelAdmin):
     def get_numero_departamento(self, obj):
         return obj.departamento.numero
 
-    get_nombre_edificio.admin_order_field = 'estacionamiento'  # Allows column order sorting
-    get_nombre_edificio.short_description = 'Estacionamiento'  # Renames column head
+    get_numero_departamento.admin_order_field = 'estacionamiento'  # Allows column order sorting
+    get_numero_departamento.short_description = 'Estacionamiento'  # Renames column head
 
 
 ##  ====== BODEGA =======
@@ -59,8 +60,8 @@ class BodegaAdmin(admin.ModelAdmin):
     def get_numero_departamento(self, obj):
         return obj.departamento.numero
 
-    get_nombre_edificio.admin_order_field = 'bodega'  # Allows column order sorting
-    get_nombre_edificio.short_description = 'Bodega'  # Renames column head
+    get_numero_departamento.admin_order_field = 'bodega'  # Allows column order sorting
+    get_numero_departamento.short_description = 'Bodega'  # Renames column head
 
 
 ##  ====== CARGO COMITE =======
@@ -69,9 +70,6 @@ class CargoComiteAdmin(admin.ModelAdmin):
     list_display = ['nombre']
     list_filter = ['nombre']
     search_fields = ['nombre']
-
-    get_nombre_edificio.admin_order_field = 'cargoComite'  # Allows column order sorting
-    get_nombre_edificio.short_description = 'CargoComite'  # Renames column head
 
 
 ##  ====== COMITE =======
@@ -88,9 +86,6 @@ class ComiteAdmin(admin.ModelAdmin):
 
     def get_nombre_condominio(self, obj):
         return obj.condominio.nombre
-
-    get_numero_departamento.admin_order_field = 'comite'  # Allows column order sorting
-    get_numero_departamento.short_description = 'Comite'  # Renames column head
 
 
 ##  ====== CONSERJE-CONDOMINIO =======
