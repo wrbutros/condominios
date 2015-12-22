@@ -35,6 +35,64 @@ class DepartamentoAdmin(admin.ModelAdmin):
     get_nombre_edificio.short_description = 'Edificio'  # Renames column head
 
 
+##  ====== ESTACIONAMIENTO =======
+class EstacionamientoAdmin(admin.ModelAdmin):
+    model = Estacionamiento
+    list_display = ['numero', 'get_numero_departamento']
+    list_filter = ['numero']  # hay que filtrar departamento
+    search_fields = ['numero', 'get_numero_departamento']
+
+    def get_numero_departamento(self, obj):
+        return obj.departamento.numero
+
+    get_nombre_edificio.admin_order_field = 'estacionamiento'  # Allows column order sorting
+    get_nombre_edificio.short_description = 'Estacionamiento'  # Renames column head
+
+
+##  ====== BODEGA =======
+class BodegaAdmin(admin.ModelAdmin):
+    model = Bodega
+    list_display = ['numero', 'get_numero_departamento']
+    list_filter = ['numero']  # hay que filtrar departamento
+    search_fields = ['numero', 'get_numero_departamento']
+
+    def get_numero_departamento(self, obj):
+        return obj.departamento.numero
+
+    get_nombre_edificio.admin_order_field = 'bodega'  # Allows column order sorting
+    get_nombre_edificio.short_description = 'Bodega'  # Renames column head
+
+
+##  ====== CARGO COMITE =======
+class CargoComiteAdmin(admin.ModelAdmin):
+    model = CargoComite
+    list_display = ['nombre']
+    list_filter = ['nombre']
+    search_fields = ['nombre']
+
+    get_nombre_edificio.admin_order_field = 'cargoComite'  # Allows column order sorting
+    get_nombre_edificio.short_description = 'CargoComite'  # Renames column head
+
+
+##  ====== COMITE =======
+class ComiteAdmin(admin.ModelAdmin):
+    model = Comite
+    list_display = ('get_cargo_comite','nombre' ,'fecha_inicio','fecha_termino',
+                    'activo', 'get_nombre_condominio')
+    list_filter = ('nombre', 'fecha_inicio', 'fecha_termino', 'activo')  # agregar filtro comite y condominio
+    search_fields = ('get_cargo_comite','nombre' ,'fecha_inicio','fecha_termino',
+                     'activo', 'get_nombre_condominio')
+
+    def get_cargo_comite(self, obj):
+        return obj.cargo.nombre
+
+    def get_nombre_condominio(self, obj):
+        return obj.condominio.nombre
+
+    get_numero_departamento.admin_order_field = 'comite'  # Allows column order sorting
+    get_numero_departamento.short_description = 'Comite'  # Renames column head
+
+
 ##  ====== CONSERJE-CONDOMINIO =======
 class ConserjeCondominioInline(admin.TabularInline):
     model = Condominio.conserjes.through
@@ -218,6 +276,10 @@ admin.site.register(Residente, ResidenteAdmin)
 admin.site.register(Departamento, DepartamentoAdmin)
 admin.site.register(Condominio, CondominioAdmin)
 admin.site.register(Edificio, EdificioAdmin)
+admin.site.register(Estacionamiento, EstacionamientoAdmin)
+admin.site.register(Bodega, BodegaAdmin)
+admin.site.register(Comite, ComiteAdmin)
+admin.site.register(CargoComite, CargoComiteAdmin)
 admin.site.register(Conserje, ConserjeAdmin)
 admin.site.register(Contrato, ContratoAdmin)
 admin.site.register(AdministradorEdificio, AdministradorEdificioAdmin)

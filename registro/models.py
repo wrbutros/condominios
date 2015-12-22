@@ -150,6 +150,40 @@ class Departamento(models.Model):
         return str(self.numero)
 
 
+class Estacionamiento(models.Model):
+    numero = models.IntegerField()
+    edificio = models.ForeignKey(Departamento)
+
+    def __str__(self):
+        return str(self.numero)
+
+class Bodega(models.Model):
+    numero = models.IntegerField()
+    edificio = models.ForeignKey(Departamento)
+
+    def __str__(self):
+        return str(self.numero)
+
+
+class CargoComite(models.Model):
+    nombre = models.CharField(max_length=30)
+
+    def __str__(self):
+        return str(self.nombre)
+
+
+class Comite(models.Model):
+    cargo = models.ForeignKey(CargoComite)
+    nombre = models.CharField(max_length=30)
+    fecha_inicio = models.DateTimeField()
+    fecha_termino = models.DateTimeField(blank=True)
+    activo = models.BooleanField(default=True)
+    condominio = models.ForeignKey(Condominio)
+
+    def __str__(self):
+        return str(self.nombre)
+
+
 class Contrato(models.Model):
     departamento = models.ForeignKey(Departamento)
     residente = models.ForeignKey(Residente)
