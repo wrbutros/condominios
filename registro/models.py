@@ -152,14 +152,14 @@ class Departamento(models.Model):
 
 class Estacionamiento(models.Model):
     numero = models.IntegerField()
-    edificio = models.ForeignKey(Departamento)
+    departamento = models.ForeignKey(Departamento)
 
     def __str__(self):
         return str(self.numero)
 
 class Bodega(models.Model):
     numero = models.IntegerField()
-    edificio = models.ForeignKey(Departamento)
+    departamento = models.ForeignKey(Departamento)
 
     def __str__(self):
         return str(self.numero)
