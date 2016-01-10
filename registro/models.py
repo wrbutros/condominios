@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MaxLengthValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Ciudad(models.Model):
@@ -117,12 +118,12 @@ class Condominio(models.Model):
 
 
 class GastoCondominio(models.Model):
-    grupoGasto = models.ForeignKey(GrupoGasto)
+    #grupoGasto = models.ForeignKey(GrupoGasto)
     tipoGasto = models.ForeignKey(TipoGasto)
     condominio = models.ForeignKey(Condominio)
     egreso = models.CharField(max_length=50)
-    descripcion =  models.TextField(validators=[MaxLengthValidator(500)])
-    fecha = models.DateTimeField()
+    #descripcion =  models.TextField(validators=[MaxLengthValidator(500)])
+    fecha = models.DateTimeField() #Se evalua MES-ANO
     valor = models.IntegerField()
 
     def __str__(self):
@@ -145,6 +146,9 @@ class Departamento(models.Model):
     cantidadPiezas = models.IntegerField(default=1)
     walkInCloset = models.BooleanField(default=True)
     edificio = models.ForeignKey(Edificio)
+    porcentajeDominio = models.DecimalField(max_digits=7, decimal_places=6,
+                                            validators=[MaxValueValidator(1),
+                                                        MinValueValidator(0)])
 
     def __str__(self):
         return str(self.numero)
@@ -153,6 +157,9 @@ class Departamento(models.Model):
 class Estacionamiento(models.Model):
     numero = models.IntegerField()
     departamento = models.ForeignKey(Departamento)
+    porcentajeDominio = models.DecimalField(max_digits=7, decimal_places=6,
+                                            validators=[MaxValueValidator(1),
+                                                        MinValueValidator(0)])
 
     def __str__(self):
         return str(self.numero)
@@ -160,6 +167,9 @@ class Estacionamiento(models.Model):
 class Bodega(models.Model):
     numero = models.IntegerField()
     departamento = models.ForeignKey(Departamento)
+    porcentajeDominio = models.DecimalField(max_digits=7, decimal_places=6,
+                                            validators=[MaxValueValidator(1),
+                                                        MinValueValidator(0)])
 
     def __str__(self):
         return str(self.numero)
@@ -198,3 +208,14 @@ class Contrato(models.Model):
 
     def __str__(self):
         return str(self.tipo)
+
+class Servicio(models.Model):
+    nombre = models.CharField(max_length=30)
+    unidad_medida = models.CharField(max_length=8)
+
+
+class LecturaServicio(models.Model):
+    servicio = models.ForeignKey(Servicio)
+    departamento = models.ForeignKey(Departamento)
+    fecha = models.DateTimeField()
+    lectura = models.IntegerField()

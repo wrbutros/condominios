@@ -3,7 +3,7 @@ from .models import Residente, Departamento, Condominio, Conserje
 from .models import Contrato, Ciudad, Comuna, Edificio, AdministradorEdificio
 from .models import GrupoGasto, TipoGasto, GastoCondominio
 from .models import Estacionamiento, Comite, CargoComite, Bodega
-
+from .models import Servicio, LecturaServicio
 
 ##  ====== RESIDENTE =======
 class ResidenteAdmin(admin.ModelAdmin):
@@ -23,9 +23,10 @@ class ResidenteAdmin(admin.ModelAdmin):
 class DepartamentoAdmin(admin.ModelAdmin):
     model = Departamento
     list_display = ['numero', 'metrosCuadrados', 'cantidadBanos',
-                    'cantidadPiezas', 'walkInCloset', 'get_nombre_edificio']
+                    'cantidadPiezas', 'walkInCloset', 'porcentajeDominio',
+                    'get_nombre_edificio']
     list_filter = ['numero', 'metrosCuadrados', 'cantidadBanos',
-                   'cantidadPiezas', 'walkInCloset']  # hay que filtrar edificio
+                   'cantidadPiezas','walkInCloset']  # hay que filtrar edificio
     search_fields = ['numero', 'metrosCuadrados', 'cantidadBanos',
                      'cantidadPiezas', 'walkInCloset', 'get_nombre_edificio']
 
@@ -39,7 +40,7 @@ class DepartamentoAdmin(admin.ModelAdmin):
 ##  ====== ESTACIONAMIENTO =======
 class EstacionamientoAdmin(admin.ModelAdmin):
     model = Estacionamiento
-    list_display = ['numero', 'get_numero_departamento']
+    list_display = ['numero', 'porcentajeDominio','get_numero_departamento']
     list_filter = ['numero']  # hay que filtrar departamento
     search_fields = ['numero', 'get_numero_departamento']
 
@@ -53,7 +54,7 @@ class EstacionamientoAdmin(admin.ModelAdmin):
 ##  ====== BODEGA =======
 class BodegaAdmin(admin.ModelAdmin):
     model = Bodega
-    list_display = ['numero', 'get_numero_departamento']
+    list_display = ['numero', 'porcentajeDominio', 'get_numero_departamento']
     list_filter = ['numero']  # hay que filtrar departamento
     search_fields = ['numero', 'get_numero_departamento']
 
@@ -251,11 +252,11 @@ class TipoGastoAdmin(admin.ModelAdmin):
 ##  ====== GASTO CONDOMINIO =======
 class GastoCondominioAdmin(admin.ModelAdmin):
     model = GastoCondominio
-    list_display = ('get_grupo_gasto', 'get_tipo_gasto', 'get_condominio',
-                    'egreso', 'descripcion', 'fecha', 'valor')
-    list_filter = ('egreso', 'descripcion', 'fecha', 'valor')
-    search_fields = ('get_grupo_gasto', 'get_tipo_gasto', 'get_condominio',
-                    'egreso', 'descripcion', 'fecha', 'valor')
+    list_display = ('get_tipo_gasto', 'get_condominio',
+                    'egreso', 'fecha', 'valor')
+    list_filter = ('egreso', 'fecha', 'valor')
+    search_fields = ('get_tipo_gasto', 'get_condominio',
+                    'egreso', 'fecha', 'valor')
 
     def get_grupo_gasto(self, obj):
         return obj.grupoGasto.nombre
@@ -265,6 +266,29 @@ class GastoCondominioAdmin(admin.ModelAdmin):
 
     def get_condominio(self, obj):
         return obj.condominio.nombre
+
+
+##  ====== SERVICIO =======
+class ServicioAdmin(admin.ModelAdmin):
+    model = Servicio
+    list_display = ('nombre', 'unidad_medida')
+    list_filter = ('nombre', 'unidad_medida')
+    search_fields = ('nombre', 'unidad_medida')
+
+
+##  ====== LECTURA SERVICIO =======
+class LecturaServicioAdmin(admin.ModelAdmin):
+    model = LecturaServicio
+    list_display = ('get_servicio', 'get_departamento', 'fecha', 'lectura')
+    list_filter = ('fecha', 'lectura')
+    search_fields = ('get_servicio', 'get_departamento', 'fecha', 'lectura')
+
+    def get_servicio(self, obj):
+        return obj.servicio.nombre
+
+    def get_departamento(self, obj):
+        return obj.departamento.numero
+
 
 
 admin.site.register(Residente, ResidenteAdmin)
@@ -284,3 +308,5 @@ admin.site.register(Comuna, ComunaAdmin)
 admin.site.register(GrupoGasto, GrupoGastoAdmin)
 admin.site.register(TipoGasto, TipoGastoAdmin)
 admin.site.register(GastoCondominio, GastoCondominioAdmin)
+admin.site.register(Servicio, ServicioAdmin)
+admin.site.register(LecturaServicio, LecturaServicioAdmin)
