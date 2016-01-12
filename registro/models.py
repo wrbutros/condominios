@@ -219,3 +219,24 @@ class LecturaServicio(models.Model):
     departamento = models.ForeignKey(Departamento)
     fecha = models.DateTimeField()
     lectura = models.IntegerField()
+
+
+#MODELO DE PRUEBA (SOLO PARA FINES VISUALES)
+class Cobranza(models.Model):
+    torre =  models.ForeignKey(Edificio)
+    departamento = models.ForeignKey(Departamento)
+    porcentajeDominio =  porcentajeDominio = models.DecimalField(max_digits=7, decimal_places=6,
+                                            validators=[MaxValueValidator(1),
+                                                        MinValueValidator(0)]);
+    gastosComunes = models.IntegerField()
+    fondoDeReserva = models.IntegerField()
+    lecturaAnterior = models.IntegerField()
+    lecturaActual = models.IntegerField()
+    aguaCalienteM3 = models.IntegerField()
+    aguaCalienteCosto = models.IntegerField()
+    multasEIntereses = models.IntegerField()
+    morosidad = models.IntegerField()
+    diferenciaAFavor = models.IntegerField()
+    cobroTransbank = models.IntegerField()
+    totalACobrar = models.IntegerField()
+    observaciones = models.CharField(max_length=200)

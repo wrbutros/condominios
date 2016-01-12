@@ -3,7 +3,7 @@ from .models import Residente, Departamento, Condominio, Conserje
 from .models import Contrato, Ciudad, Comuna, Edificio, AdministradorEdificio
 from .models import GrupoGasto, TipoGasto, GastoCondominio
 from .models import Estacionamiento, Comite, CargoComite, Bodega
-from .models import Servicio, LecturaServicio
+from .models import Servicio, LecturaServicio, Cobranza
 
 ##  ====== RESIDENTE =======
 class ResidenteAdmin(admin.ModelAdmin):
@@ -291,6 +291,36 @@ class LecturaServicioAdmin(admin.ModelAdmin):
 
 
 
+## ======= MODELO COBRANZA (SOLO PARA EFECTOS VISUALES) =======
+class CobranzaAdmin(admin.ModelAdmin):
+    model = Cobranza
+    list_display = ('get_edificio', 'get_departamento', 'porcentajeDominio',
+                    'gastosComunes', 'fondoDeReserva', 'lecturaAnterior',
+                    'lecturaActual', 'aguaCalienteM3', 'aguaCalienteCosto',
+                    'multasEIntereses', 'morosidad', 'diferenciaAFavor',
+                    'cobroTransbank', 'totalACobrar', 'observaciones')
+
+    list_filter = ('porcentajeDominio',
+                    'gastosComunes', 'fondoDeReserva', 'lecturaAnterior',
+                    'lecturaActual', 'aguaCalienteM3', 'aguaCalienteCosto',
+                    'multasEIntereses', 'morosidad', 'diferenciaAFavor',
+                    'cobroTransbank', 'totalACobrar', 'observaciones')
+
+    search_fields = ('get_edificio', 'get_departamento', 'porcentajeDominio',
+                    'gastosComunes', 'fondoDeReserva', 'lecturaAnterior',
+                    'lecturaActual', 'aguaCalienteM3', 'aguaCalienteCosto',
+                    'multasEIntereses', 'morosidad', 'diferenciaAFavor',
+                    'cobroTransbank', 'totalACobrar', 'observaciones')
+
+    def get_departamento(self, obj):
+        return obj.departamento.numero
+
+    def get_edificio(self, obj):
+        return obj.edificio.nombre
+
+
+
+
 admin.site.register(Residente, ResidenteAdmin)
 admin.site.register(Departamento, DepartamentoAdmin)
 admin.site.register(Condominio, CondominioAdmin)
@@ -310,3 +340,4 @@ admin.site.register(TipoGasto, TipoGastoAdmin)
 admin.site.register(GastoCondominio, GastoCondominioAdmin)
 admin.site.register(Servicio, ServicioAdmin)
 admin.site.register(LecturaServicio, LecturaServicioAdmin)
+admin.site.register(Cobranza, CobranzaAdmin)
