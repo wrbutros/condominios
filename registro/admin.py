@@ -4,6 +4,8 @@ from .models import Contrato, Ciudad, Comuna, Edificio, AdministradorEdificio
 from .models import GrupoGasto, TipoGasto, GastoCondominio
 from .models import Estacionamiento, Comite, CargoComite, Bodega
 from .models import Servicio, LecturaServicio, Cobranza
+from .models import TipoMultaEInteres, MultaCondominio, MultaEInteres
+from .models import PagoYAbono, BalanceMensual
 
 ##  ====== RESIDENTE =======
 class ResidenteAdmin(admin.ModelAdmin):
@@ -290,6 +292,61 @@ class LecturaServicioAdmin(admin.ModelAdmin):
         return obj.departamento.numero
 
 
+##  ====== Tipo Multa E Interes =======
+class TipoMultaEInteresAdmin(admin.ModelAdmin):
+    model = TipoMultaEInteres
+    list_display = ('nombre', )
+    list_filter = ('nombre',)
+    search_fields = ('nombre', )
+
+
+##  ====== Multa Condominio =======
+class MultaCondominioAdmin(admin.ModelAdmin):
+    model = MultaCondominio
+    list_display = ('get_tipoMultaEInteres', 'get_condominio', 'porcentajeMulta')
+    list_filter = ('porcentajeMulta', )
+    search_fields = ('get_tipoMultaEInteres', 'get_condominio', 'porcentajeMulta')
+
+    def get_tipoMultaEInteres(self, obj):
+        return obj.TipoMultaEInteres.nombre
+
+    def get_condominio(self, obj):
+        return obj.condominio.nombre
+
+
+##  ====== Multa E Interes =======
+class MultaEInteresAdmin(admin.ModelAdmin):
+    model = MultaEInteres
+    list_display = ('get_departamento', 'monto', 'fecha')
+    list_filter = ('monto', 'fecha')
+    search_fields = ('get_departamento', 'monto', 'fecha')
+
+    def get_departamento(self, obj):
+        return obj.departamento.numero
+
+
+##  ====== Pago Y Abono =======
+class PagoYAbonoAdmin(admin.ModelAdmin):
+    model = PagoYAbono
+    list_display = ('get_departamento', 'monto', 'fecha')
+    list_filter = ('monto', 'fecha')
+    search_fields = ('get_departamento', 'monto', 'fecha')
+
+    def get_departamento(self, obj):
+        return obj.departamento.numero
+
+
+##  ====== Balance Mensual =======
+class BalanceMensualAdmin(admin.ModelAdmin):
+    model = BalanceMensual
+    list_display = ('get_departamento', 'monto', 'fecha')
+    list_filter = ('monto', 'fecha')
+    search_fields = ('get_departamento', 'monto', 'fecha')
+
+    def get_departamento(self, obj):
+        return obj.departamento.numero
+
+
 
 ## ======= MODELO COBRANZA (SOLO PARA EFECTOS VISUALES) =======
 class CobranzaAdmin(admin.ModelAdmin):
@@ -341,3 +398,9 @@ admin.site.register(GastoCondominio, GastoCondominioAdmin)
 admin.site.register(Servicio, ServicioAdmin)
 admin.site.register(LecturaServicio, LecturaServicioAdmin)
 admin.site.register(Cobranza, CobranzaAdmin)
+
+admin.site.register(TipoMultaEInteres, TipoMultaEInteresAdmin)
+admin.site.register(MultaCondominio, MultaCondominioAdmin)
+admin.site.register(MultaEInteres, MultaEInteresAdmin)
+admin.site.register(PagoYAbono, PagoYAbonoAdmin)
+admin.site.register(BalanceMensual, BalanceMensualAdmin)

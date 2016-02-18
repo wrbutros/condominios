@@ -221,6 +221,34 @@ class LecturaServicio(models.Model):
     lectura = models.IntegerField()
 
 
+class TipoMultaEInteres (models.Model):
+    nombre = models.CharField(max_length=80)
+
+
+class MultaCondominio(models.Model):
+    tipoMultaEInteres = models.ForeignKey(TipoMultaEInteres)
+    condominio = models.ForeignKey(Condominio)
+    porcentajeMulta = models.IntegerField()
+
+
+class MultaEInteres(models.Model):
+    departamento = models.ForeignKey(Departamento)
+    monto = models.IntegerField()
+    fecha = models.DateTimeField()
+
+
+class PagoYAbono(models.Model):
+    departamento = models.ForeignKey(Departamento)
+    monto = models.IntegerField()
+    fecha = models.DateTimeField()
+
+
+class BalanceMensual(models.Model):
+    departamento = models.ForeignKey(Departamento)
+    monto = models.IntegerField()
+    fecha = models.DateTimeField()
+
+
 #MODELO DE PRUEBA (SOLO PARA FINES VISUALES)
 class Cobranza(models.Model):
     torre =  models.ForeignKey(Edificio)
