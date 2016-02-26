@@ -1,7 +1,7 @@
 FROM python:2.7
 
 ENV PYTHONUNBUFFERED 1
-ENV DJANGO_SETTINGS_MODULE condominios.settings.sqlite
+ENV DJANGO_SETTINGS_MODULE condominios.settings.devel
 
 RUN mkdir /code
 WORKDIR /code
