@@ -20,14 +20,17 @@ from rest_framework import routers
 from registro import views
 
 router = routers.DefaultRouter()
+router.register(r'ciudades', views.CiudadSet)
+router.register(r'comunas', views.ComunaSet)
+router.register(r'administradores', views.AdministradorEdificioSet)
+router.register(r'conserjes', views.ConserjeSet)
 router.register(r'condominios', views.CondominioSet)
 router.register(r'edificios', views.EdificioSet)
-router.register(r'departamentos', views.DepartamentoSet)
-router.register(r'serviciost', views.ServicioSet)
-router.register(r'servicios', views.LecturaServicioSet)
+router.register(r'departamentos', views.DepartamentoSet, 'Departamentos')
+router.register(r'servicios/type', views.ServicioSet, 'ServiciosType')
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
+router.register(r'departamentos/(?P<id_departamento>.+)/servicios', views.LecturaServicioSet, 'Servicios')
+
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include(router.urls)),
