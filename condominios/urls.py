@@ -25,11 +25,11 @@ router.register(r'comunas', views.ComunaSet)
 router.register(r'administradores', views.AdministradorEdificioSet)
 router.register(r'conserjes', views.ConserjeSet)
 router.register(r'condominios', views.CondominioSet)
-router.register(r'edificios', views.EdificioSet)
-router.register(r'departamentos', views.DepartamentoSet, 'Departamentos')
-router.register(r'servicios/type', views.ServicioSet, 'ServiciosType')
+router.register(r'edificios', views.EdificioSet, 'edificios')
+router.register(r'departamentos', views.DepartamentoSet, 'departamentos')
+router.register(r'serviciostypes', views.ServicioSet, 'serviciostypes')
 
-router.register(r'departamentos/(?P<id_departamento>.+)/servicios', views.LecturaServicioSet, 'Servicios')
+router.register(r'departamentos/(?P<id_departamento>.+)/servicios', views.LecturaServicioSet, 'servicios')
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),

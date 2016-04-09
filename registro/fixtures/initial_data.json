@@ -23,6 +23,81 @@
     }
   },
   {
-    "model": "registro.administrador"
+    "model": "registro.administradorEdificio",
+    "pk": 1,
+    "fields": {
+      "url": "testurl",
+      "nombreEmpresa": "Test",
+      "rutEmpresa": "21",
+      "razonSocial": "Test2",
+      "fono": 66778899,
+      "email": "dd",
+      "direccion": "dd",
+      "ciudad": 1,
+      "comuna": 1
+    }
+  },
+  {
+    "model": "registro.conserje",
+    "pk": 1,
+    "fields": {
+      "rut": "111111111",
+      "nombres": "asdf",
+      "apellido_paterno": "lore",
+      "apellido_materno": "to",
+      "genero": "M",
+      "fono": 0,
+      "email": "",
+      "direccion": "werty",
+      "activo": true,
+      "comuna": 1,
+      "ciudad": 1
+    }
+  },
+  {
+    "model": "registro.condominio",
+    "pk": 1,
+    "fields": {
+      "nombre": "Nombre del condomino",
+      "fono": 22773344,
+      "direccion": "Direccion de condominio",
+      "reglamento": "Reglamente de condominio",
+      "ciudad": 1,
+      "comuna": 1,
+      "administradorEdificio": 1,
+      "conserjes": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "registro.edificio",
+    "pk": 1,
+    "fields": {
+      "nombre": "Nombre del edificio",
+      "cantidadPisos": 12,
+      "condominio": 1
+    }
+  },
+  {
+    "model": "registro.departamento",
+    "pk": 1,
+    "fields": {
+      "numero": 101,
+      "metrosCuadrados": "45m2",
+      "cantidadBanos": 2,
+      "cantidadPiezas": 4,
+      "walkInCloset": true,
+      "porcentajeDominio": 1,
+      "edificio": 1
+    }
+  },
+  {
+    "model": "registro.servicio",
+    "pk": 1,
+    "fields": {
+      "nombre": "Agua",
+      "unidad_medida": "m3"
+    }
   }
 ]

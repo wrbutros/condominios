@@ -31,6 +31,7 @@ class GrupoGasto(models.Model):
     def __unicode__(self):
         return self.nombre
 
+
 class TipoGasto(models.Model):
     nombre = models.CharField(max_length=50)
     activo = models.BooleanField(default=True)
@@ -118,12 +119,12 @@ class Condominio(models.Model):
 
 
 class GastoCondominio(models.Model):
-    #grupoGasto = models.ForeignKey(GrupoGasto)
+    # grupoGasto = models.ForeignKey(GrupoGasto)
     tipoGasto = models.ForeignKey(TipoGasto)
     condominio = models.ForeignKey(Condominio)
     egreso = models.CharField(max_length=50)
-    #descripcion =  models.TextField(validators=[MaxLengthValidator(500)])
-    fecha = models.DateTimeField() #Se evalua MES-ANO
+    # descripcion =  models.TextField(validators=[MaxLengthValidator(500)])
+    fecha = models.DateTimeField()  # Se evalua MES-ANO
     valor = models.IntegerField()
 
     def __str__(self):
@@ -145,7 +146,7 @@ class Departamento(models.Model):
     cantidadBanos = models.IntegerField(default=1)
     cantidadPiezas = models.IntegerField(default=1)
     walkInCloset = models.BooleanField(default=True)
-    edificio = models.ForeignKey(Edificio)
+    edificio = models.ForeignKey(Edificio, null=False, related_name='edificio')
     porcentajeDominio = models.DecimalField(max_digits=7, decimal_places=6,
                                             validators=[MaxValueValidator(1),
                                                         MinValueValidator(0)])
@@ -163,6 +164,7 @@ class Estacionamiento(models.Model):
 
     def __str__(self):
         return str(self.numero)
+
 
 class Bodega(models.Model):
     numero = models.IntegerField()
@@ -209,6 +211,7 @@ class Contrato(models.Model):
     def __str__(self):
         return str(self.tipo)
 
+
 class Servicio(models.Model):
     nombre = models.CharField(max_length=30)
     unidad_medida = models.CharField(max_length=8)
@@ -221,7 +224,7 @@ class LecturaServicio(models.Model):
     lectura = models.IntegerField()
 
 
-class TipoMultaEInteres (models.Model):
+class TipoMultaEInteres(models.Model):
     nombre = models.CharField(max_length=80)
 
 
@@ -249,13 +252,13 @@ class BalanceMensual(models.Model):
     fecha = models.DateTimeField()
 
 
-#MODELO DE PRUEBA (SOLO PARA FINES VISUALES)
+# MODELO DE PRUEBA (SOLO PARA FINES VISUALES)
 class Cobranza(models.Model):
-    torre =  models.ForeignKey(Edificio)
+    torre = models.ForeignKey(Edificio)
     departamento = models.ForeignKey(Departamento)
-    porcentajeDominio =  porcentajeDominio = models.DecimalField(max_digits=7, decimal_places=6,
-                                            validators=[MaxValueValidator(1),
-                                                        MinValueValidator(0)]);
+    porcentajeDominio = porcentajeDominio = models.DecimalField(max_digits=7, decimal_places=6,
+                                                                validators=[MaxValueValidator(1),
+                                                                            MinValueValidator(0)]);
     gastosComunes = models.IntegerField()
     fondoDeReserva = models.IntegerField()
     lecturaAnterior = models.IntegerField()
