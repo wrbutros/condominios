@@ -1,7 +1,8 @@
 FROM python:2.7
 
-ENV_FILE:
-    - ./common.env
+ENV PYTHONUNBUFFERED 1
+ENV DJANGO_SETTINGS_MODULE condominios.settings.devel
+
 RUN mkdir /code
 WORKDIR /code
 ADD requirements.txt /code/

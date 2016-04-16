@@ -20,7 +20,7 @@ from rest_framework import routers
 from registro import views
 
 router = routers.DefaultRouter()
-router.register(r'ciudades', views.CiudadSet)
+router.register(r'v1/ciudades', views.CiudadSet)
 router.register(r'comunas', views.ComunaSet)
 router.register(r'administradores', views.AdministradorEdificioSet)
 router.register(r'conserjes', views.ConserjeSet)
