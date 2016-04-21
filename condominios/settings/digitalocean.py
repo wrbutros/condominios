@@ -16,3 +16,5 @@ ENVIRONMENT = 'devel'
 CORS_ORIGIN_WHITELIST = (
     'condominio-transparente.dyndns.org'
 )
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
