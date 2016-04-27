@@ -1,0 +1,25 @@
+[
+  {
+    "model": "geoname.ciudad",
+    "pk": 1,
+    "fields": {
+      "nombre": "Santiago"
+    }
+  },
+  {
+    "model": "geoname.comuna",
+    "pk": 1,
+    "fields": {
+      "nombre": "Santiago",
+      "ciudad": 1
+    }
+  },
+  {
+    "model": "geoname.comuna",
+    "pk": 2,
+    "fields": {
+      "nombre": "Lampa",
+      "ciudad": 1
+    }
+  }
+]

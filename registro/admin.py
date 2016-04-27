@@ -1,11 +1,12 @@
 from django.contrib import admin
 from .models import Residente, Departamento, Condominio, Conserje
-from .models import Contrato, Ciudad, Comuna, Edificio, AdministradorEdificio
+from .models import Contrato, Edificio, AdministradorEdificio
 from .models import GrupoGasto, TipoGasto, GastoCondominio
 from .models import Estacionamiento, Comite, CargoComite, Bodega
 from .models import Servicio, LecturaServicio, Cobranza
 from .models import TipoMultaEInteres, MultaCondominio, MultaEInteres
 from .models import PagoYAbono, BalanceMensual
+
 
 ##  ====== RESIDENTE =======
 class ResidenteAdmin(admin.ModelAdmin):
@@ -28,7 +29,7 @@ class DepartamentoAdmin(admin.ModelAdmin):
                     'cantidadPiezas', 'walkInCloset', 'porcentajeDominio',
                     'get_nombre_edificio']
     list_filter = ['numero', 'metrosCuadrados', 'cantidadBanos',
-                   'cantidadPiezas','walkInCloset']  # hay que filtrar edificio
+                   'cantidadPiezas', 'walkInCloset']  # hay que filtrar edificio
     search_fields = ['numero', 'metrosCuadrados', 'cantidadBanos',
                      'cantidadPiezas', 'walkInCloset', 'get_nombre_edificio']
 
@@ -42,7 +43,7 @@ class DepartamentoAdmin(admin.ModelAdmin):
 ##  ====== ESTACIONAMIENTO =======
 class EstacionamientoAdmin(admin.ModelAdmin):
     model = Estacionamiento
-    list_display = ['numero', 'porcentajeDominio','get_numero_departamento']
+    list_display = ['numero', 'porcentajeDominio', 'get_numero_departamento']
     list_filter = ['numero']  # hay que filtrar departamento
     search_fields = ['numero', 'get_numero_departamento']
 
@@ -78,10 +79,10 @@ class CargoComiteAdmin(admin.ModelAdmin):
 ##  ====== COMITE =======
 class ComiteAdmin(admin.ModelAdmin):
     model = Comite
-    list_display = ('get_cargo_comite','nombre' ,'fecha_inicio','fecha_termino',
+    list_display = ('get_cargo_comite', 'nombre', 'fecha_inicio', 'fecha_termino',
                     'activo', 'get_nombre_condominio')
     list_filter = ('nombre', 'fecha_inicio', 'fecha_termino', 'activo')  # agregar filtro comite y condominio
-    search_fields = ('get_cargo_comite','nombre' ,'fecha_inicio','fecha_termino',
+    search_fields = ('get_cargo_comite', 'nombre', 'fecha_inicio', 'fecha_termino',
                      'activo', 'get_nombre_condominio')
 
     def get_cargo_comite(self, obj):
@@ -213,25 +214,6 @@ class AdministradorEdificioAdmin(admin.ModelAdmin):
     get_nombre_ciudad.short_description = 'Ciudad'  # Renames column head
 
 
-##  ====== CIUDAD =======
-class CiudadAdmin(admin.ModelAdmin):
-    model = Ciudad
-    list_display = ('nombre',)
-    list_filter = ('nombre',)  # hay que filtrar ciudad
-    search_fields = ('nombre',)
-
-
-##  ====== COMUNA =======
-class ComunaAdmin(admin.ModelAdmin):
-    model = Comuna
-    list_display = ('nombre', 'get_nombre_ciudad')
-    list_filter = ('nombre',)  # hay que filtrar ciudad
-    search_fields = ('nombre', 'get_nombre_ciudad')
-
-    def get_nombre_ciudad(self, obj):
-        return obj.ciudad.nombre
-
-
 ##  ====== GRUPO GASTO =======
 class GrupoGastoAdmin(admin.ModelAdmin):
     model = GrupoGasto
@@ -258,7 +240,7 @@ class GastoCondominioAdmin(admin.ModelAdmin):
                     'egreso', 'fecha', 'valor')
     list_filter = ('egreso', 'fecha', 'valor')
     search_fields = ('get_tipo_gasto', 'get_condominio',
-                    'egreso', 'fecha', 'valor')
+                     'egreso', 'fecha', 'valor')
 
     def get_grupo_gasto(self, obj):
         return obj.grupoGasto.nombre
@@ -295,16 +277,16 @@ class LecturaServicioAdmin(admin.ModelAdmin):
 ##  ====== Tipo Multa E Interes =======
 class TipoMultaEInteresAdmin(admin.ModelAdmin):
     model = TipoMultaEInteres
-    list_display = ('nombre', )
+    list_display = ('nombre',)
     list_filter = ('nombre',)
-    search_fields = ('nombre', )
+    search_fields = ('nombre',)
 
 
 ##  ====== Multa Condominio =======
 class MultaCondominioAdmin(admin.ModelAdmin):
     model = MultaCondominio
     list_display = ('get_tipoMultaEInteres', 'get_condominio', 'porcentajeMulta')
-    list_filter = ('porcentajeMulta', )
+    list_filter = ('porcentajeMulta',)
     search_fields = ('get_tipoMultaEInteres', 'get_condominio', 'porcentajeMulta')
 
     def get_tipoMultaEInteres(self, obj):
@@ -347,7 +329,6 @@ class BalanceMensualAdmin(admin.ModelAdmin):
         return obj.departamento.numero
 
 
-
 ## ======= MODELO COBRANZA (SOLO PARA EFECTOS VISUALES) =======
 class CobranzaAdmin(admin.ModelAdmin):
     model = Cobranza
@@ -358,24 +339,22 @@ class CobranzaAdmin(admin.ModelAdmin):
                     'cobroTransbank', 'totalACobrar', 'observaciones')
 
     list_filter = ('porcentajeDominio',
-                    'gastosComunes', 'fondoDeReserva', 'lecturaAnterior',
-                    'lecturaActual', 'aguaCalienteM3', 'aguaCalienteCosto',
-                    'multasEIntereses', 'morosidad', 'diferenciaAFavor',
-                    'cobroTransbank', 'totalACobrar', 'observaciones')
+                   'gastosComunes', 'fondoDeReserva', 'lecturaAnterior',
+                   'lecturaActual', 'aguaCalienteM3', 'aguaCalienteCosto',
+                   'multasEIntereses', 'morosidad', 'diferenciaAFavor',
+                   'cobroTransbank', 'totalACobrar', 'observaciones')
 
     search_fields = ('get_edificio', 'get_departamento', 'porcentajeDominio',
-                    'gastosComunes', 'fondoDeReserva', 'lecturaAnterior',
-                    'lecturaActual', 'aguaCalienteM3', 'aguaCalienteCosto',
-                    'multasEIntereses', 'morosidad', 'diferenciaAFavor',
-                    'cobroTransbank', 'totalACobrar', 'observaciones')
+                     'gastosComunes', 'fondoDeReserva', 'lecturaAnterior',
+                     'lecturaActual', 'aguaCalienteM3', 'aguaCalienteCosto',
+                     'multasEIntereses', 'morosidad', 'diferenciaAFavor',
+                     'cobroTransbank', 'totalACobrar', 'observaciones')
 
     def get_departamento(self, obj):
         return obj.departamento.numero
 
     def get_edificio(self, obj):
         return obj.edificio.nombre
-
-
 
 
 admin.site.register(Residente, ResidenteAdmin)
@@ -389,8 +368,6 @@ admin.site.register(CargoComite, CargoComiteAdmin)
 admin.site.register(Conserje, ConserjeAdmin)
 admin.site.register(Contrato, ContratoAdmin)
 admin.site.register(AdministradorEdificio, AdministradorEdificioAdmin)
-admin.site.register(Ciudad, CiudadAdmin)
-admin.site.register(Comuna, ComunaAdmin)
 
 admin.site.register(GrupoGasto, GrupoGastoAdmin)
 admin.site.register(TipoGasto, TipoGastoAdmin)

@@ -17,19 +17,22 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 from rest_framework import routers
-from registro import views
+from registro.views import AdministradorEdificioSet, ConserjeSet
+from registro.views import CondominioSet, EdificioSet, DepartamentoSet
+from registro.views import ServicioSet, LecturaServicioSet
+from geoname.views import CiudadSet, ComunaSet
 
 router = routers.DefaultRouter()
-router.register(r'v1/ciudades', views.CiudadSet)
-router.register(r'comunas', views.ComunaSet)
-router.register(r'administradores', views.AdministradorEdificioSet)
-router.register(r'conserjes', views.ConserjeSet)
-router.register(r'condominios', views.CondominioSet)
-router.register(r'edificios', views.EdificioSet, 'edificios')
-router.register(r'departamentos', views.DepartamentoSet, 'departamentos')
-router.register(r'serviciostypes', views.ServicioSet, 'serviciostypes')
+router.register(r'v1/ciudades', CiudadSet)
+router.register(r'comunas', ComunaSet)
+router.register(r'administradores', AdministradorEdificioSet)
+router.register(r'conserjes', ConserjeSet)
+router.register(r'condominios', CondominioSet)
+router.register(r'edificios', EdificioSet, 'edificios')
+router.register(r'departamentos', DepartamentoSet, 'departamentos')
+router.register(r'serviciostypes', ServicioSet, 'serviciostypes')
 
-router.register(r'departamentos/(?P<id_departamento>.+)/servicios', views.LecturaServicioSet, 'servicios')
+router.register(r'departamentos/(?P<id_departamento>.+)/servicios', LecturaServicioSet, 'servicios')
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),

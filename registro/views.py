@@ -3,12 +3,11 @@ from django.shortcuts import render
 from rest_framework import viewsets
 
 from models import Condominio, Edificio, Departamento, Servicio, LecturaServicio
-from models import Comuna, Ciudad, AdministradorEdificio, Conserje
+from models import AdministradorEdificio, Conserje
 
 from serializers import CondominioSerializer, EdificioSerializer
 from serializers import DepartamentoSerializer, ServicioSerializer
-from serializers import LecturaServicioSerializer, CiudadSerializer
-from serializers import ComunaSerializer, AdministradorEdificioSerializer
+from serializers import LecturaServicioSerializer, AdministradorEdificioSerializer
 from serializers import ConserjeSerializer
 
 
@@ -25,16 +24,6 @@ def index(request):
 class ConserjeSet(viewsets.ModelViewSet):
     queryset = Conserje.objects.all()
     serializer_class = ConserjeSerializer
-
-
-class ComunaSet(viewsets.ModelViewSet):
-    queryset = Comuna.objects.all()
-    serializer_class = ComunaSerializer
-
-
-class CiudadSet(viewsets.ModelViewSet):
-    queryset = Ciudad.objects.all()
-    serializer_class = CiudadSerializer
 
 
 class AdministradorEdificioSet(viewsets.ModelViewSet):

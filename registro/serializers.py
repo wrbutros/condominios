@@ -1,21 +1,12 @@
-from models import Condominio, Edificio, Departamento, Servicio, LecturaServicio
-from models import Ciudad, Comuna, AdministradorEdificio, Conserje
 from rest_framework import serializers
+
+from models import Condominio, Edificio, Departamento, Servicio, LecturaServicio
+from models import AdministradorEdificio, Conserje
 
 
 class ConserjeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Conserje
-
-
-class ComunaSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Comuna
-
-
-class CiudadSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Ciudad
 
 
 class AdministradorEdificioSerializer(serializers.HyperlinkedModelSerializer):

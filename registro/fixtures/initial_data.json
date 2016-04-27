@@ -1,28 +1,5 @@
 [
   {
-    "model": "registro.ciudad",
-    "pk": 1,
-    "fields": {
-      "nombre": "Santiago"
-    }
-  },
-  {
-    "model": "registro.comuna",
-    "pk": 1,
-    "fields": {
-      "nombre": "Santiago",
-      "ciudad": 1
-    }
-  },
-  {
-    "model": "registro.comuna",
-    "pk": 2,
-    "fields": {
-      "nombre": "Lampa",
-      "ciudad": 1
-    }
-  },
-  {
     "model": "registro.administradorEdificio",
     "pk": 1,
     "fields": {
