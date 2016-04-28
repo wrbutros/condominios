@@ -7,6 +7,7 @@ from .models import Servicio, LecturaServicio, Cobranza
 from .models import TipoMultaEInteres, MultaCondominio, MultaEInteres
 from .models import PagoYAbono, BalanceMensual
 
+from geoname.models import Ciudad, Comuna
 
 ##  ====== RESIDENTE =======
 class ResidenteAdmin(admin.ModelAdmin):
