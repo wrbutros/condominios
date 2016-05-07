@@ -1,6 +1,10 @@
+from __future__ import print_function
+
+from rest_framework import mixins
 from django.shortcuts import render
 
 from rest_framework import viewsets
+from rest_framework.response import Response
 
 from models import Condominio, Edificio, Departamento, Servicio, LecturaServicio
 from models import AdministradorEdificio, Conserje
@@ -8,7 +12,7 @@ from models import AdministradorEdificio, Conserje
 from serializers import CondominioSerializer, EdificioSerializer
 from serializers import DepartamentoSerializer, ServicioSerializer
 from serializers import LecturaServicioSerializer, AdministradorEdificioSerializer
-from serializers import ConserjeSerializer
+from serializers import ConserjeSerializer, DashboardSerializer
 
 
 def dashboard(request):
@@ -58,3 +62,34 @@ class LecturaServicioSet(viewsets.ModelViewSet):
         id_departamento = self.kwargs['id_departamento']
         departamento = Departamento.objects.filter(pk=id_departamento)
         return LecturaServicio.objects.filter(departamento=departamento)
+
+
+class DashboardSet(mixins.CreateModelMixin,
+                   mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin,
+                   viewsets.GenericViewSet):
+    serializer_class = DashboardSerializer
+
+    def get_queryset(self):
+        return [{
+            "nombre": "Otros tulipanes",
+            "labels": [
+                "Enero",
+                "Febrero",
+                "Marzo",
+                "Abril",
+                "Mayo",
+                "Junio",
+                "Julio"
+            ],
+            "data": [
+                11456789,
+                12456734,
+                15475637,
+                13456321,
+                14567432,
+                16543876,
+                19345687
+            ]
+        }]

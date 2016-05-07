@@ -19,7 +19,7 @@ from django.contrib import admin
 from rest_framework import routers
 from registro.views import AdministradorEdificioSet, ConserjeSet
 from registro.views import CondominioSet, EdificioSet, DepartamentoSet
-from registro.views import ServicioSet, LecturaServicioSet
+from registro.views import ServicioSet, LecturaServicioSet, DashboardSet
 from geoname.views import CiudadSet, ComunaSet
 
 router = routers.DefaultRouter()
@@ -27,7 +27,10 @@ router.register(r'v1/ciudades', CiudadSet)
 router.register(r'v1/comunas', ComunaSet)
 router.register(r'v1/administradores', AdministradorEdificioSet)
 router.register(r'v1/conserjes', ConserjeSet)
+
 router.register(r'v1/condominios', CondominioSet)
+router.register(r'v1/condominios/(?P<id_condominio>.+)/dashboard', DashboardSet, 'dashboard')
+
 router.register(r'v1/edificios', EdificioSet, 'edificios')
 router.register(r'v1/departamentos', DepartamentoSet, 'departamentos')
 router.register(r'v1/serviciostypes', ServicioSet, 'serviciostypes')

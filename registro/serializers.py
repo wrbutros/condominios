@@ -68,3 +68,9 @@ class LecturaServicioSerializer(serializers.HyperlinkedModelSerializer):
             'fecha',
             'lectura'
         )
+
+
+class DashboardSerializer(serializers.Serializer):
+    labels = serializers.ListField()
+    data = serializers.ListField()
+    nombre = serializers.CharField()
