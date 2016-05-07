@@ -11,4 +11,3 @@ DATABASES = {
 }
 
 ENVIRONMENT = 'devel'
-
