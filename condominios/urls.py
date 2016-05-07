@@ -23,11 +23,11 @@ from registro.views import ServicioSet, LecturaServicioSet
 from geoname.views import CiudadSet, ComunaSet
 
 router = routers.DefaultRouter()
-router.register(r'v1/ciudades', CiudadSet, 'ciudades')
-router.register(r'v1/comunas', ComunaSet, 'comunas')
-router.register(r'v1/administradores', AdministradorEdificioSet, 'administradores')
-router.register(r'v1/conserjes', ConserjeSet, 'conserjes')
-router.register(r'v1/condominios', CondominioSet, 'condominios')
+router.register(r'v1/ciudades', CiudadSet)
+router.register(r'v1/comunas', ComunaSet)
+router.register(r'v1/administradores', AdministradorEdificioSet)
+router.register(r'v1/conserjes', ConserjeSet)
+router.register(r'v1/condominios', CondominioSet)
 router.register(r'v1/edificios', EdificioSet, 'edificios')
 router.register(r'v1/departamentos', DepartamentoSet, 'departamentos')
 router.register(r'v1/serviciostypes', ServicioSet, 'serviciostypes')
