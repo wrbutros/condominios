@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from models import Condominio, Edificio, Departamento, Servicio, LecturaServicio
-from models import AdministradorEdificio, Conserje
+from models import AdministradorEdificio, Conserje, MultaEInteres, PagoYAbono
 
 
 class ConserjeSerializer(serializers.HyperlinkedModelSerializer):
@@ -67,6 +67,29 @@ class LecturaServicioSerializer(serializers.HyperlinkedModelSerializer):
             'departamento',
             'fecha',
             'lectura'
+        )
+
+
+class MultaEInteresSerializer(serializers.HyperlinkedModelSerializer):
+    departamento = DepartamentoSerializer()
+
+    class Meta:
+        model = MultaEInteres
+        fields = (
+            'departamento',
+            'monto',
+            'fecha'
+        )
+
+class PagoYAbonoSerializer(serializers.HyperlinkedModelSerializer):
+    departamento = DepartamentoSerializer()
+
+    class Meta:
+        model = PagoYAbono
+        fields = (
+            'departamento',
+            'monto',
+            'fecha'
         )
 
 

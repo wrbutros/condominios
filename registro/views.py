@@ -7,12 +7,13 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from models import Condominio, Edificio, Departamento, Servicio, LecturaServicio
-from models import AdministradorEdificio, Conserje
+from models import AdministradorEdificio, Conserje, MultaEInteres, PagoYAbono
 
 from serializers import CondominioSerializer, EdificioSerializer
 from serializers import DepartamentoSerializer, ServicioSerializer
 from serializers import LecturaServicioSerializer, AdministradorEdificioSerializer
-from serializers import ConserjeSerializer, DashboardSerializer
+from serializers import ConserjeSerializer, MultaEInteresSerializer
+from serializers import PagoYAbonoSerializer, DashboardSerializer
 
 
 def dashboard(request):
@@ -62,6 +63,24 @@ class LecturaServicioSet(viewsets.ModelViewSet):
         id_departamento = self.kwargs['id_departamento']
         departamento = Departamento.objects.filter(pk=id_departamento)
         return LecturaServicio.objects.filter(departamento=departamento)
+
+
+class MultaEInteresSet(viewsets.ModelViewSet):
+    serializer_class = MultaEInteresSerializer
+
+    def get_queryset(self):
+        id_departamento = self.kwargs['id_departamento']
+        departamento = Departamento.objects.filter(pk=id_departamento)
+        return MultaEInteres.objects.filter(departamento=departamento)
+
+
+class PagoYAbonoSet(viewsets.ModelViewSet):
+    serializer_class = PagoYAbonoSerializer
+
+    def get_queryset(self):
+        id_departamento = self.kwargs['id_departamento']
+        departamento = Departamento.objects.filter(pk=id_departamento)
+        return PagoYAbono.objects.filter(departamento=departamento)
 
 
 class DashboardSet(mixins.CreateModelMixin,
