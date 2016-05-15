@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from models import Condominio, Edificio, Departamento, Servicio, LecturaServicio
 from models import AdministradorEdificio, Conserje, MultaEInteres, PagoYAbono
+from models import Contrato, Residente
 
 
 class ConserjeSerializer(serializers.HyperlinkedModelSerializer):
@@ -17,6 +18,22 @@ class AdministradorEdificioSerializer(serializers.HyperlinkedModelSerializer):
 class CondominioSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Condominio
+
+
+class ResidenteSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Residente
+        fields = (
+            'rut',
+            'nombres',
+            'apellido_paterno',
+            'apellido_materno',
+            'genero',
+            'fono',
+            'email',
+            'fecha_ingreso',
+            'activo'
+        )
 
 
 class EdificioSerializer(serializers.HyperlinkedModelSerializer):
@@ -81,6 +98,7 @@ class MultaEInteresSerializer(serializers.HyperlinkedModelSerializer):
             'fecha'
         )
 
+
 class PagoYAbonoSerializer(serializers.HyperlinkedModelSerializer):
     departamento = DepartamentoSerializer()
 
@@ -90,6 +108,22 @@ class PagoYAbonoSerializer(serializers.HyperlinkedModelSerializer):
             'departamento',
             'monto',
             'fecha'
+        )
+
+
+class ContratoSerializer(serializers.HyperlinkedModelSerializer):
+    departamento = DepartamentoSerializer()
+    residente  = ResidenteSerializer()
+
+    class Meta:
+        model = Contrato
+        fields = (
+            'departamento',
+            'residente',
+            'fecha_inicio',
+            'fecha_termino',
+            'tipo',
+            'activo'
         )
 
 

@@ -20,7 +20,8 @@ from rest_framework import routers
 from registro.views import AdministradorEdificioSet, ConserjeSet
 from registro.views import CondominioSet, EdificioSet, DepartamentoSet
 from registro.views import ServicioSet, LecturaServicioSet, DashboardSet
-from registro.views import PagoYAbonoSet, MultaEInteresSet
+from registro.views import PagoYAbonoSet, MultaEInteresSet, ContratoSet
+from registro.views import ResidenteSet
 
 from geoname.views import CiudadSet, ComunaSet
 
@@ -41,6 +42,8 @@ router.register(r'v1/serviciostypes', ServicioSet, 'serviciostypes')
 router.register(r'v1/departamentos/(?P<id_departamento>.+)/servicios', LecturaServicioSet, 'servicios')
 router.register(r'v1/departamentos/(?P<id_departamento>.+)/pagosyabonos', PagoYAbonoSet, 'pagosYAbonos')
 router.register(r'v1/departamentos/(?P<id_departamento>.+)/multaseintereses', MultaEInteresSet, 'multasEIntereses')
+router.register(r'v1/departamentos/(?P<id_departamento>.+)/contratos', ContratoSet, 'contratos')
+router.register(r'v1/departamentos/(?P<id_departamento>.+)/residenteactual', ResidenteSet, 'residente')
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),

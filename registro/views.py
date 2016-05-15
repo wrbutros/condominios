@@ -8,12 +8,13 @@ from rest_framework.response import Response
 
 from models import Condominio, Edificio, Departamento, Servicio, LecturaServicio
 from models import AdministradorEdificio, Conserje, MultaEInteres, PagoYAbono
+from models import Contrato, Residente
 
 from serializers import CondominioSerializer, EdificioSerializer
 from serializers import DepartamentoSerializer, ServicioSerializer
 from serializers import LecturaServicioSerializer, AdministradorEdificioSerializer
-from serializers import ConserjeSerializer, MultaEInteresSerializer
-from serializers import PagoYAbonoSerializer, DashboardSerializer
+from serializers import ConserjeSerializer, MultaEInteresSerializer, ContratoSerializer
+from serializers import PagoYAbonoSerializer, DashboardSerializer, ResidenteSerializer
 
 
 def dashboard(request):
@@ -81,6 +82,39 @@ class PagoYAbonoSet(viewsets.ModelViewSet):
         id_departamento = self.kwargs['id_departamento']
         departamento = Departamento.objects.filter(pk=id_departamento)
         return PagoYAbono.objects.filter(departamento=departamento)
+
+
+#TODO: Revisar reglas de sobre atributos "activo"
+class ResidenteSet(viewsets.ModelViewSet):
+    serializer_class = ResidenteSerializer
+
+    def get_queryset(self):
+        id_departamento = self.kwargs['id_departamento']
+        departamento = Departamento.objects.filter(pk=id_departamento)
+        #Se busca un residente activo (que viva alli) con contrato vigente
+        contrato = Contrato.objects.filter(departamento=departamento,
+                                           residente__activo=1,
+                                           activo=1)
+        idResidente = 0;
+        #Si existen 2 contratos (propietario y arriendo) y ambos son vigentes
+        #Se busca el arrendatario, de lo contrario se devuelve el propietario
+        if len(contrato) > 1:
+            for c in contrato:
+                if c.tipo == 'A':
+                    idRedidente = c.residente.id
+        elif len(contrato) == 1:
+            idResidente = contrato.first().residente.id
+
+        return Residente.objects.filter(pk=idResidente)
+
+
+class ContratoSet(viewsets.ModelViewSet):
+    serializer_class = ContratoSerializer
+
+    def get_queryset(self):
+        id_departamento = self.kwargs['id_departamento']
+        departamento = Departamento.objects.filter(pk=id_departamento)
+        return Contrato.objects.filter(departamento=departamento)
 
 
 class DashboardSet(mixins.CreateModelMixin,
