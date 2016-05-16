@@ -5,7 +5,7 @@ from .models import GrupoGasto, TipoGasto, GastoCondominio
 from .models import Estacionamiento, Comite, CargoComite, Bodega
 from .models import Servicio, LecturaServicio, Cobranza
 from .models import TipoMultaEInteres, MultaCondominio, MultaEInteres
-from .models import PagoYAbono, BalanceMensual
+from .models import PagoYAbono, BalanceMensual, Glosa
 
 from geoname.models import Ciudad, Comuna
 
@@ -330,6 +330,22 @@ class BalanceMensualAdmin(admin.ModelAdmin):
         return obj.departamento.numero
 
 
+##  ====== Glosa =======
+class GlosaAdmin(admin.ModelAdmin):
+    model = Glosa
+    list_display = ('nombre', 'get_grupo_gasto', 'get_condominio',
+                    'descripcion', 'fecha', 'valor')
+    list_filter = ('nombre','descripcion' , 'fecha', 'valor')
+    search_fields = ('nombre', 'get_grupo_gasto', 'get_condominio',
+                     'descripcion', 'fecha', 'valor')
+
+    def get_grupo_gasto(self, obj):
+        return obj.grupoGasto.nombre
+
+    def get_condominio(self, obj):
+        return obj.condominio.nombre
+
+
 ## ======= MODELO COBRANZA (SOLO PARA EFECTOS VISUALES) =======
 class CobranzaAdmin(admin.ModelAdmin):
     model = Cobranza
@@ -373,6 +389,7 @@ admin.site.register(AdministradorEdificio, AdministradorEdificioAdmin)
 admin.site.register(GrupoGasto, GrupoGastoAdmin)
 admin.site.register(TipoGasto, TipoGastoAdmin)
 admin.site.register(GastoCondominio, GastoCondominioAdmin)
+admin.site.register(Glosa, GlosaAdmin) #NOTA: Reemplazara a GastoCondominio
 admin.site.register(Servicio, ServicioAdmin)
 admin.site.register(LecturaServicio, LecturaServicioAdmin)
 admin.site.register(Cobranza, CobranzaAdmin)

@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from models import Condominio, Edificio, Departamento, Servicio, LecturaServicio
 from models import AdministradorEdificio, Conserje, MultaEInteres, PagoYAbono
-from models import Contrato, Residente
+from models import Contrato, Residente, GrupoGasto, Glosa
 
 
 class ConserjeSerializer(serializers.HyperlinkedModelSerializer):
@@ -15,9 +15,30 @@ class AdministradorEdificioSerializer(serializers.HyperlinkedModelSerializer):
         model = AdministradorEdificio
 
 
+class GrupoGastoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = GrupoGasto
+
+
 class CondominioSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Condominio
+
+
+class GlosaSerializer(serializers.HyperlinkedModelSerializer):
+    condominio = CondominioSerializer()
+    grupoGasto = GrupoGastoSerializer()
+
+    class Meta:
+        model = Glosa
+        fields = (
+            'nombre',
+            'grupoGasto',
+            'condominio',
+            'descripcion',
+            'fecha',
+            'valor'
+        )
 
 
 class ResidenteSerializer(serializers.HyperlinkedModelSerializer):

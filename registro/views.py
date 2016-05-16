@@ -8,13 +8,14 @@ from rest_framework.response import Response
 
 from models import Condominio, Edificio, Departamento, Servicio, LecturaServicio
 from models import AdministradorEdificio, Conserje, MultaEInteres, PagoYAbono
-from models import Contrato, Residente
+from models import Contrato, Residente, GrupoGasto, Glosa
 
 from serializers import CondominioSerializer, EdificioSerializer
 from serializers import DepartamentoSerializer, ServicioSerializer
 from serializers import LecturaServicioSerializer, AdministradorEdificioSerializer
 from serializers import ConserjeSerializer, MultaEInteresSerializer, ContratoSerializer
 from serializers import PagoYAbonoSerializer, DashboardSerializer, ResidenteSerializer
+from serializers import GrupoGastoSerializer, GlosaSerializer
 
 
 def dashboard(request):
@@ -115,6 +116,24 @@ class ContratoSet(viewsets.ModelViewSet):
         id_departamento = self.kwargs['id_departamento']
         departamento = Departamento.objects.filter(pk=id_departamento)
         return Contrato.objects.filter(departamento=departamento)
+
+
+class GrupoGastoSet(viewsets.ModelViewSet):
+    serializer_class = GrupoGastoSerializer
+
+    def get_queryset(self):
+        id_departamento = self.kwargs['id_condominio']
+        departamento = Departamento.objects.filter(pk=id_departamento)
+        return Contrato.objects.filter(departamento=departamento)
+
+
+class GlosaSet(viewsets.ModelViewSet):
+    serializer_class = GlosaSerializer
+
+    def get_queryset(self):
+        id_condominio = self.kwargs['id_condominio']
+        condominio = Condominio.objects.filter(pk=id_condominio)
+        return Glosa.objects.filter(condominio=condomino)
 
 
 class DashboardSet(mixins.CreateModelMixin,

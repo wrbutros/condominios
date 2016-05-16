@@ -107,12 +107,24 @@ class GastoCondominio(models.Model):
     tipoGasto = models.ForeignKey(TipoGasto)
     condominio = models.ForeignKey(Condominio)
     egreso = models.CharField(max_length=50)
-    # descripcion =  models.TextField(validators=[MaxLengthValidator(500)])
+    # descripcion = models.TextField(validators=[MaxLengthValidator(500)])
     fecha = models.DateTimeField()  # Se evalua MES-ANO
     valor = models.IntegerField()
 
     def __str__(self):
         return str(self.valor)
+
+
+class Glosa (models.Model):
+    nombre = models.CharField(max_length=100)
+    grupoGasto = models.ForeignKey(GrupoGasto)
+    condominio = models.ForeignKey(Condominio)
+    descripcion = models.TextField(validators=[MaxLengthValidator(500)])
+    fecha = models.DateTimeField()  # Se evalua MES-ANO
+    valor = models.IntegerField()
+
+    def __str__(self):
+        return str(self.nombre)
 
 
 class Edificio(models.Model):
