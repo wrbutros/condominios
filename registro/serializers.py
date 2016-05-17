@@ -15,14 +15,18 @@ class AdministradorEdificioSerializer(serializers.HyperlinkedModelSerializer):
         model = AdministradorEdificio
 
 
-class GrupoGastoSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = GrupoGasto
-
-
 class CondominioSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Condominio
+
+
+class GrupoGastoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = GrupoGasto
+        fields = (
+            'nombre',
+            'activo'
+        )
 
 
 class GlosaSerializer(serializers.HyperlinkedModelSerializer):
@@ -34,10 +38,11 @@ class GlosaSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'nombre',
             'grupoGasto',
-            'condominio',
             'descripcion',
-            'fecha',
-            'valor'
+            'nombreDocumento',
+            'nombreDocumentoOrig',
+            'ingreso',
+            'egreso'
         )
 
 
@@ -146,6 +151,17 @@ class ContratoSerializer(serializers.HyperlinkedModelSerializer):
             'tipo',
             'activo'
         )
+
+
+class RendicionSerializer(serializers.Serializer):
+    caption = serializers.CharField()
+    height = serializers.IntegerField()
+    hiddengrid = serializers.BooleanField()
+    hidegrid = serializers.BooleanField()
+    grouping = serializers.BooleanField()
+    colNames = serializers.ListField()
+    colModel = serializers.ListField() #No es una lista
+    data = serializers.ListField() #No es una lista
 
 
 class DashboardSerializer(serializers.Serializer):

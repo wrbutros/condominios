@@ -120,8 +120,11 @@ class Glosa (models.Model):
     grupoGasto = models.ForeignKey(GrupoGasto)
     condominio = models.ForeignKey(Condominio)
     descripcion = models.TextField(validators=[MaxLengthValidator(500)])
+    nombreDocumento = models.CharField(max_length=300)
+    nombreDocumentoOrig = models.CharField(max_length=300)
     fecha = models.DateTimeField()  # Se evalua MES-ANO
-    valor = models.IntegerField()
+    ingreso = models.IntegerField(default=0)
+    egreso = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.nombre)

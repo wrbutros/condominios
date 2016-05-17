@@ -334,10 +334,13 @@ class BalanceMensualAdmin(admin.ModelAdmin):
 class GlosaAdmin(admin.ModelAdmin):
     model = Glosa
     list_display = ('nombre', 'get_grupo_gasto', 'get_condominio',
-                    'descripcion', 'fecha', 'valor')
-    list_filter = ('nombre','descripcion' , 'fecha', 'valor')
+                    'descripcion', 'nombreDocumento', 'nombreDocumentoOrig',
+                    'fecha', 'ingreso', 'egreso')
+    list_filter = ('nombre','descripcion' , 'nombreDocumento',
+                   'nombreDocumentoOrig', 'fecha', 'ingreso', 'egreso')
     search_fields = ('nombre', 'get_grupo_gasto', 'get_condominio',
-                     'descripcion', 'fecha', 'valor')
+                     'descripcion', 'nombreDocumento', 'nombreDocumentoOrig',
+                     'fecha', 'ingreso', 'egreso')
 
     def get_grupo_gasto(self, obj):
         return obj.grupoGasto.nombre

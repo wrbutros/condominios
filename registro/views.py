@@ -15,7 +15,7 @@ from serializers import DepartamentoSerializer, ServicioSerializer
 from serializers import LecturaServicioSerializer, AdministradorEdificioSerializer
 from serializers import ConserjeSerializer, MultaEInteresSerializer, ContratoSerializer
 from serializers import PagoYAbonoSerializer, DashboardSerializer, ResidenteSerializer
-from serializers import GrupoGastoSerializer, GlosaSerializer
+from serializers import GrupoGastoSerializer, GlosaSerializer, RendicionSerializer
 
 
 def dashboard(request):
@@ -119,12 +119,8 @@ class ContratoSet(viewsets.ModelViewSet):
 
 
 class GrupoGastoSet(viewsets.ModelViewSet):
+    queryset = GrupoGasto.objects.all()
     serializer_class = GrupoGastoSerializer
-
-    def get_queryset(self):
-        id_departamento = self.kwargs['id_condominio']
-        departamento = Departamento.objects.filter(pk=id_departamento)
-        return Contrato.objects.filter(departamento=departamento)
 
 
 class GlosaSet(viewsets.ModelViewSet):
@@ -134,6 +130,99 @@ class GlosaSet(viewsets.ModelViewSet):
         id_condominio = self.kwargs['id_condominio']
         condominio = Condominio.objects.filter(pk=id_condominio)
         return Glosa.objects.filter(condominio=condomino)
+
+
+# TODO: data debe retornar cada glosa en este formato:
+# {
+#       "id": "7",
+#       "tipoGasto": "REPARACIONES", -----> #GrupoGasto
+#       "detalle": "Sueldo Liquidos del Personal",
+#       "documento": "Egreso #20",
+#       "ingreso": "4790160",
+#       "egreso": 0
+#},
+class RendicionSet(mixins.CreateModelMixin,
+                   mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin,
+                   viewsets.GenericViewSet):
+    serializer_class = RendicionSerializer
+
+    def get_queryset(self):
+        id_condominio = self.kwargs['id_condominio']
+        condominio = Condominio.objects.filter(pk=id_condominio)
+        grupoGasto = GrupoGasto.objects.all()
+        glosa = Glosa.objects.filter(condominio=condominio,
+                                     fecha__year = datetime.now().year,
+                                     fecha__month = datetime.now().month)
+
+        data = [{
+            "caption": "Gastos Comunes",
+            "height": 400,
+            "hiddengrid": false,
+            "hidegrid": false,
+            "grouping": true,
+            "colNames": [
+                "id",
+                "Tipo Gasto",
+                "Detalle",
+                "Documento",
+                "Ingreso",
+                "Egreso"
+            ],
+            "colModel": [
+                {
+                    "name": "id",
+                    "index": "id",
+                    "hidden": true
+                },
+                {
+                    "name": "tipoGasto",
+                    "index": "tipoGasto",
+                    "editable": true,
+                    "edittype": "select",
+                    "editoptions": {
+                        "value": "ADMINISTRACION-REMUNERACIONES:ADMINISTRACION-REMUNERACIONES;CONSUMO:CONSUMO;MANTENCIONES:MANTENCIONES"
+                    }
+                },
+                {
+                    "name": "detalle",
+                    "index": "detalle",
+                    "editable": true
+                },
+                {
+                    "name": "documento",
+                    "index": "documento",
+                    "editable": true
+                },
+                {
+                    "name": "ingreso",
+                    "index": "ingreso",
+                    "align": "right",
+                    "formatter": "integer",
+                    "editable": true,
+                    "fixed": true,
+                    "width": 75,
+                    "summaryTpl": "{0}",
+                    "summaryType": "sum"
+                },
+                {
+                    "name": "egreso",
+                    "index": "egreso",
+                    "align": "right",
+                    "formatter": "integer",
+                    "editable": true,
+                    "fixed": true,
+                    "width": 75,
+                    "summaryTpl": "{0}",
+                    "summaryType": "sum"
+                }
+            ],
+            "data": [
+
+            ]
+        }]
+        return data
 
 
 class DashboardSet(mixins.CreateModelMixin,

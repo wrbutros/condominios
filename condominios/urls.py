@@ -21,7 +21,7 @@ from registro.views import AdministradorEdificioSet, ConserjeSet
 from registro.views import CondominioSet, EdificioSet, DepartamentoSet
 from registro.views import ServicioSet, LecturaServicioSet, DashboardSet
 from registro.views import PagoYAbonoSet, MultaEInteresSet, ContratoSet
-from registro.views import ResidenteSet, GrupoGastoSet, GlosaSet
+from registro.views import ResidenteSet, GrupoGastoSet, GlosaSet, RendicionSet
 
 from geoname.views import CiudadSet, ComunaSet
 
@@ -33,7 +33,7 @@ router.register(r'v1/conserjes', ConserjeSet)
 
 router.register(r'v1/condominios', CondominioSet)
 router.register(r'v1/condominios/(?P<id_condominio>.+)/dashboard', DashboardSet, 'dashboard')
-#router.register(r'v1/condominios/(?P<id_condominio>.+)/dashboard', DashboardSet, 'dashboard')
+#router.register(r'v1/condominios/(?P<id_condominio>.+)/rendicionActual', RendicionSet, 'Rendicion')
 
 router.register(r'v1/edificios', EdificioSet, 'edificios')
 router.register(r'v1/departamentos', DepartamentoSet, 'departamentos')
