@@ -33,7 +33,7 @@ router.register(r'v1/conserjes', ConserjeSet)
 
 router.register(r'v1/condominios', CondominioSet)
 router.register(r'v1/condominios/(?P<id_condominio>.+)/dashboard', DashboardSet, 'dashboard')
-#router.register(r'v1/condominios/(?P<id_condominio>.+)/rendicionActual', RendicionSet, 'Rendicion')
+router.register(r'v1/condominios/(?P<id_condominio>.+)/rendicionActual', RendicionSet, 'Rendicion')
 
 router.register(r'v1/edificios', EdificioSet, 'edificios')
 router.register(r'v1/departamentos', DepartamentoSet, 'departamentos')
