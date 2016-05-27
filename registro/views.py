@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+from datetime import datetime
+
 from rest_framework import mixins
 from django.shortcuts import render
 
@@ -237,8 +239,13 @@ class RendicionSet(mixins.CreateModelMixin,
                 "ingreso": 0,
                 "egreso": "733655"
             }
-        ];
-        return data
+        ]
+
+        result = [{
+            "data": data
+        }]
+
+        return result
 
 
 class DashboardSet(mixins.CreateModelMixin,

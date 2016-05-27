@@ -154,13 +154,6 @@ class ContratoSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class RendicionSerializer(serializers.Serializer):
-    caption = serializers.CharField()
-    height = serializers.IntegerField()
-    hiddengrid = serializers.BooleanField()
-    hidegrid = serializers.BooleanField()
-    grouping = serializers.BooleanField()
-    colNames = serializers.ListField()
-    colModel = serializers.ListField() #No es una lista
     data = serializers.ListField() #No es una lista
 
 
