@@ -21,7 +21,8 @@ from registro.views import AdministradorEdificioSet, ConserjeSet
 from registro.views import CondominioSet, EdificioSet, DepartamentoSet
 from registro.views import ServicioSet, LecturaServicioSet, DashboardSet
 from registro.views import PagoYAbonoSet, MultaEInteresSet, ContratoSet
-from registro.views import ResidenteSet, GrupoGastoSet, GlosaSet, RendicionSet
+from registro.views import GrupoGastoSet, GlosaSet, RendicionSet
+from registro.views import ResidenteSet, ResidenteActualSet
 
 from geoname.views import CiudadSet, ComunaSet
 
@@ -30,10 +31,14 @@ router.register(r'v1/ciudades', CiudadSet)
 router.register(r'v1/comunas', ComunaSet)
 router.register(r'v1/administradores', AdministradorEdificioSet)
 router.register(r'v1/conserjes', ConserjeSet)
+router.register(r'v1/residentes', ResidenteSet)
 
 router.register(r'v1/condominios', CondominioSet)
 router.register(r'v1/condominios/(?P<id_condominio>.+)/dashboard', DashboardSet, 'dashboard')
-router.register(r'v1/condominios/(?P<id_condominio>.+)/rendicionActual', RendicionSet, 'Rendicion')
+router.register(r'v1/condominios/(?P<id_condominio>.+)/rendicionActual', RendicionSet, 'rendicion')
+
+# NOTE: Manage the JQGrid CRUD
+router.register(r'v1/glosa/(?P<id_condominio>.+)/jqgrid', GlosaSet, 'glosa')
 
 router.register(r'v1/edificios', EdificioSet, 'edificios')
 router.register(r'v1/departamentos', DepartamentoSet, 'departamentos')
@@ -45,7 +50,7 @@ router.register(r'v1/departamentos/(?P<id_departamento>.+)/servicios', LecturaSe
 router.register(r'v1/departamentos/(?P<id_departamento>.+)/pagosyabonos', PagoYAbonoSet, 'pagosYAbonos')
 router.register(r'v1/departamentos/(?P<id_departamento>.+)/multaseintereses', MultaEInteresSet, 'multasEIntereses')
 router.register(r'v1/departamentos/(?P<id_departamento>.+)/contratos', ContratoSet, 'contratos')
-router.register(r'v1/departamentos/(?P<id_departamento>.+)/residenteactual', ResidenteSet, 'residente')
+router.register(r'v1/departamentos/(?P<id_departamento>.+)/residenteactual', ResidenteActualSet, 'residente')
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),

@@ -28,6 +28,7 @@ class TipoGasto(models.Model):
         return self.nombre
 
 
+# TODO: La lista de residentes deberia estar limitada a un condominio?
 class Residente(models.Model):
     rut = models.CharField(max_length=13)
     nombres = models.CharField(max_length=100)
@@ -120,8 +121,8 @@ class Glosa (models.Model):
     grupoGasto = models.ForeignKey(GrupoGasto)
     condominio = models.ForeignKey(Condominio)
     descripcion = models.TextField(validators=[MaxLengthValidator(500)])
-    nombreDocumento = models.CharField(max_length=300)
-    nombreDocumentoOrig = models.CharField(max_length=300)
+    nombreDocumento = models.CharField(max_length=300, default="")
+    nombreDocumentoOrig = models.CharField(max_length=300, default="")
     fecha = models.DateTimeField()  # Se evalua MES-ANO
     ingreso = models.IntegerField(default=0)
     egreso = models.IntegerField(default=0)

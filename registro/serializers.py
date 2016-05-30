@@ -38,6 +38,7 @@ class GlosaSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'nombre',
             'grupoGasto',
+            'condominio',
             'descripcion',
             'nombreDocumento',
             'nombreDocumentoOrig',
@@ -155,6 +156,7 @@ class ContratoSerializer(serializers.HyperlinkedModelSerializer):
 
 class RendicionSerializer(serializers.Serializer):
     data = serializers.ListField() #No es una lista
+    grupos = serializers.CharField()
 
 
 class DashboardSerializer(serializers.Serializer):

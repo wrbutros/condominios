@@ -6,7 +6,9 @@ from rest_framework import mixins
 from django.shortcuts import render
 
 from rest_framework import viewsets
+from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
+
 
 from models import Condominio, Edificio, Departamento, Servicio, LecturaServicio
 from models import AdministradorEdificio, Conserje, MultaEInteres, PagoYAbono
@@ -39,6 +41,10 @@ class AdministradorEdificioSet(viewsets.ModelViewSet):
     queryset = AdministradorEdificio.objects.all()
     serializer_class = AdministradorEdificioSerializer
 
+
+class ResidenteSet(viewsets.ModelViewSet):
+    queryset = Residente.objects.all()
+    serializer_class = ResidenteSerializer
 
 class CondominioSet(viewsets.ModelViewSet):
     queryset = Condominio.objects.all()
@@ -88,7 +94,7 @@ class PagoYAbonoSet(viewsets.ModelViewSet):
 
 
 #TODO: Revisar reglas de sobre atributos "activo"
-class ResidenteSet(viewsets.ModelViewSet):
+class ResidenteActualSet(viewsets.ModelViewSet):
     serializer_class = ResidenteSerializer
 
     def get_queryset(self):
@@ -131,18 +137,19 @@ class GlosaSet(viewsets.ModelViewSet):
     def get_queryset(self):
         id_condominio = self.kwargs['id_condominio']
         condominio = Condominio.objects.filter(pk=id_condominio)
-        return Glosa.objects.filter(condominio=condomino)
+        return Glosa.objects.filter(condominio=condominio)
+
+    @detail_route(methods=['post'])
+    def set_queryset(self, request, pk=None):
+        id_condominio = self.kwargs['id_condominio']
+        condominio = Condominio.objects.filter(pk=id_condominio)
+
+        data = request.data
+        #id_grupo = request.data.grupoGasto
+        #grupoGasto = GrupoGasto.objects.filter(pk=id_condominio)
+        return Response({'status':'OK'})
 
 
-# TODO: data debe retornar cada glosa en este formato:
-# {
-#       "id": "7",
-#       "tipoGasto": "REPARACIONES", -----> #GrupoGasto
-#       "detalle": "Sueldo Liquidos del Personal",
-#       "documento": "Egreso #20",
-#       "ingreso": "4790160",
-#       "egreso": 0
-#},
 class RendicionSet(mixins.CreateModelMixin,
                    mixins.ListModelMixin,
                    mixins.RetrieveModelMixin,
@@ -153,96 +160,34 @@ class RendicionSet(mixins.CreateModelMixin,
     def get_queryset(self):
         id_condominio = self.kwargs['id_condominio']
         condominio = Condominio.objects.filter(pk=id_condominio)
-        grupoGasto = GrupoGasto.objects.all()
-        glosa = Glosa.objects.filter(condominio=condominio,
+        gruposGasto = GrupoGasto.objects.all()
+        glosas = Glosa.objects.filter(condominio=condominio,
                                      fecha__year = datetime.now().year,
                                      fecha__month = datetime.now().month)
 
-        data = [
-            {
-                "id": "1",
-                "tipoGasto": "ADMINISTRACION-REMUNERACIONES",
-                "detalle": "Sueldo Liquidos del Personal",
-                "documento": "Egreso #20",
-                "ingreso": 657300,
-                "egreso": 0
-            },
-            {
-                "id": "2",
-                "tipoGasto": "ADMINISTRACION-REMUNERACIONES",
-                "detalle": "Previred",
-                "documento": "Egreso #22",
-                "ingreso": 748000,
-                "egreso": 0
-            },
-            {
-                "id": "3",
-                "tipoGasto": "CONSUMO",
-                "detalle": "Articulos de aseo",
-                "documento": "Egreso #224",
-                "ingreso": "123000",
-                "egreso": 0
-            },
-            {
-                "id": "4",
-                "tipoGasto": "CONSUMO",
-                "detalle": "Previred",
-                "documento": "Egreso #22",
-                "ingreso": "733654",
-                "egreso": 0
-            },
-            {
-                "id": "5",
-                "tipoGasto": "MANTENCIONES",
-                "detalle": "Sueldo Liquidos del Personal",
-                "documento": "Egreso #20",
-                "ingreso": "4790160",
-                "egreso": 0
-            },
-            {
-                "id": "6",
-                "tipoGasto": "MANTENCIONES",
-                "detalle": "Previred",
-                "documento": "Egreso #22",
-                "ingreso": "733654",
-                "egreso": 0
-            },
-            {
-                "id": "7",
-                "tipoGasto": "REPARACIONES",
-                "detalle": "Sueldo Liquidos del Personal",
-                "documento": "Egreso #20",
-                "ingreso": "4790160",
-                "egreso": 0
-            },
-            {
-                "id": "8",
-                "tipoGasto": "REPARACIONES",
-                "detalle": "Previred",
-                "documento": "Egreso #22",
-                "ingreso": "733654",
-                "egreso": 0
-            },
-            {
-                "id": "9",
-                "tipoGasto": "VARIOS",
-                "detalle": "Sueldo Liquidos del Personal",
-                "documento": "Egreso #20",
-                "ingreso": "0",
-                "egreso": 5456
-            },
-            {
-                "id": "10",
-                "tipoGasto": "VARIOS",
-                "detalle": "Previred",
-                "documento": "Egreso #22",
-                "ingreso": 0,
-                "egreso": "733655"
-            }
-        ]
+        #Its making the 'glosa' JSON
+        data = []
+        for glosa in glosas:
+            data.append(
+                {
+                    "id": str(glosa.id),
+                    "tipoGasto": glosa.grupoGasto.nombre,
+                    "descripcion": glosa.descripcion,
+                    "documento": glosa.nombreDocumentoOrig,
+                    "ingreso": glosa.ingreso,
+                    "egreso": glosa.egreso
+                }
+            )
+        #Se genera el String con todos los grupo gastos disponibles
+        stringGrupos = ""
+        for grupo in gruposGasto:
+            if stringGrupos != "":
+                stringGrupos += ";"
+            stringGrupos += str(grupo.id)+":"+grupo.nombre
 
         result = [{
-            "data": data
+            "data": data,
+            "grupos": stringGrupos
         }]
 
         return result
@@ -265,15 +210,25 @@ class DashboardSet(mixins.CreateModelMixin,
                 "Abril",
                 "Mayo",
                 "Junio",
-                "Julio"
+                "Julio",
+                "Agosto",
+                "Septiembre",
+                "Octubre",
+                "Noviembre",
+                "Diciembre"
             ],
             "data": [
                 11456789,
                 12456734,
-                15475637,
+                14475637,
                 13456321,
                 14567432,
-                16543876,
-                19345687
+                15543876,
+                15345687,
+                14567432,
+                15456321,
+                15875637,
+                15456734,
+                16456789,
             ]
         }]
