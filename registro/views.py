@@ -117,6 +117,15 @@ class ResidenteActualSet(viewsets.ModelViewSet):
         return Residente.objects.filter(pk=idResidente)
 
 
+class ContratoCondominioSet(viewsets.ModelViewSet):
+    serializer_class = ContratoSerializer
+
+    def get_queryset(self):
+        id_condominio = self.kwargs['id_condominio']
+        condominio = Departamento.objects.filter(pk=id_condominio)
+        return Contrato.objects.filter(departamento__edificio__condominio__id=condominio.first().id)
+
+
 class ContratoSet(viewsets.ModelViewSet):
     serializer_class = ContratoSerializer
 

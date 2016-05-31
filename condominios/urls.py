@@ -22,7 +22,7 @@ from registro.views import CondominioSet, EdificioSet, DepartamentoSet
 from registro.views import ServicioSet, LecturaServicioSet, DashboardSet
 from registro.views import PagoYAbonoSet, MultaEInteresSet, ContratoSet
 from registro.views import GrupoGastoSet, GlosaSet, RendicionSet
-from registro.views import ResidenteSet, ResidenteActualSet
+from registro.views import ResidenteSet, ResidenteActualSet, ContratoCondominioSet
 
 from geoname.views import CiudadSet, ComunaSet
 
@@ -36,6 +36,7 @@ router.register(r'v1/residentes', ResidenteSet)
 router.register(r'v1/condominios', CondominioSet)
 router.register(r'v1/condominios/(?P<id_condominio>.+)/dashboard', DashboardSet, 'dashboard')
 router.register(r'v1/condominios/(?P<id_condominio>.+)/rendicionActual', RendicionSet, 'rendicion')
+router.register(r'v1/condominios/(?P<id_condominio>.+)/contratosCondominio', ContratoCondominioSet, 'contratos')
 
 # NOTE: Manage the JQGrid CRUD
 router.register(r'v1/glosa/(?P<id_condominio>.+)/jqgrid', GlosaSet, 'glosa')
