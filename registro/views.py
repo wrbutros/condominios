@@ -74,6 +74,14 @@ class LecturaServicioSet(viewsets.ModelViewSet):
         departamento = Departamento.objects.filter(pk=id_departamento)
         return LecturaServicio.objects.filter(departamento=departamento)
 
+class LecturaServicioCondominioSet(viewsets.ModelViewSet):
+    serializer_class = LecturaServicioSerializer
+
+    def get_queryset(self):
+        id_condominio = self.kwargs['id_condominio']
+        condominio = Condominio.objects.filter(pk=id_condominio)
+        return LecturaServicio.objects.filter(departamento__edificio__condominio__id=condominio.first().id)
+
 
 class MultaEInteresSet(viewsets.ModelViewSet):
     serializer_class = MultaEInteresSerializer
