@@ -4,11 +4,12 @@ from datetime import datetime
 
 from rest_framework import mixins
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
-
 
 from models import Condominio, Edificio, Departamento, Servicio, LecturaServicio
 from models import AdministradorEdificio, Conserje, MultaEInteres, PagoYAbono
@@ -32,6 +33,18 @@ def index(request):
     return render(request, 'registro/index.html', context)
 
 
+@csrf_exempt
+def jqgrid(request, id_condominio):
+    oper = request.POST['oper']
+
+    if oper == "add":
+        return JsonResponse({'soyun': 'add'})
+    elif oper == "edit":
+        return JsonResponse({'soyun': 'edit'})
+    elif oper == "del":
+        return JsonResponse({'soyun': 'del'})
+
+
 class ConserjeSet(viewsets.ModelViewSet):
     queryset = Conserje.objects.all()
     serializer_class = ConserjeSerializer
@@ -45,6 +58,7 @@ class AdministradorEdificioSet(viewsets.ModelViewSet):
 class ResidenteSet(viewsets.ModelViewSet):
     queryset = Residente.objects.all()
     serializer_class = ResidenteSerializer
+
 
 class CondominioSet(viewsets.ModelViewSet):
     queryset = Condominio.objects.all()
@@ -74,6 +88,7 @@ class LecturaServicioSet(viewsets.ModelViewSet):
         departamento = Departamento.objects.filter(pk=id_departamento)
         return LecturaServicio.objects.filter(departamento=departamento)
 
+
 class LecturaServicioCondominioSet(viewsets.ModelViewSet):
     serializer_class = LecturaServicioSerializer
 
@@ -101,20 +116,20 @@ class PagoYAbonoSet(viewsets.ModelViewSet):
         return PagoYAbono.objects.filter(departamento=departamento)
 
 
-#TODO: Revisar reglas de sobre atributos "activo"
+# TODO: Revisar reglas de sobre atributos "activo"
 class ResidenteActualSet(viewsets.ModelViewSet):
     serializer_class = ResidenteSerializer
 
     def get_queryset(self):
         id_departamento = self.kwargs['id_departamento']
         departamento = Departamento.objects.filter(pk=id_departamento)
-        #Se busca un residente activo (que viva alli) con contrato vigente
+        # Se busca un residente activo (que viva alli) con contrato vigente
         contrato = Contrato.objects.filter(departamento=departamento,
                                            residente__activo=1,
                                            activo=1)
         idResidente = 0;
-        #Si existen 2 contratos (propietario y arriendo) y ambos son vigentes
-        #Se busca el arrendatario, de lo contrario se devuelve el propietario
+        # Si existen 2 contratos (propietario y arriendo) y ambos son vigentes
+        # Se busca el arrendatario, de lo contrario se devuelve el propietario
         if len(contrato) > 1:
             for c in contrato:
                 if c.tipo == 'A':
@@ -162,9 +177,9 @@ class GlosaSet(viewsets.ModelViewSet):
         condominio = Condominio.objects.filter(pk=id_condominio)
 
         data = request.data
-        #id_grupo = request.data.grupoGasto
-        #grupoGasto = GrupoGasto.objects.filter(pk=id_condominio)
-        return Response({'status':'OK'})
+        # id_grupo = request.data.grupoGasto
+        # grupoGasto = GrupoGasto.objects.filter(pk=id_condominio)
+        return Response({'status': 'OK'})
 
 
 class RendicionSet(mixins.CreateModelMixin,
@@ -179,10 +194,10 @@ class RendicionSet(mixins.CreateModelMixin,
         condominio = Condominio.objects.filter(pk=id_condominio)
         gruposGasto = GrupoGasto.objects.all()
         glosas = Glosa.objects.filter(condominio=condominio,
-                                     fecha__year = datetime.now().year,
-                                     fecha__month = datetime.now().month)
+                                      fecha__year=datetime.now().year,
+                                      fecha__month=datetime.now().month)
 
-        #Its making the 'glosa' JSON
+        # Its making the 'glosa' JSON
         data = []
         for glosa in glosas:
             data.append(
@@ -195,12 +210,12 @@ class RendicionSet(mixins.CreateModelMixin,
                     "egreso": glosa.egreso
                 }
             )
-        #Se genera el String con todos los grupo gastos disponibles
+        # Se genera el String con todos los grupo gastos disponibles
         stringGrupos = ""
         for grupo in gruposGasto:
             if stringGrupos != "":
                 stringGrupos += ";"
-            stringGrupos += str(grupo.id)+":"+grupo.nombre
+            stringGrupos += str(grupo.id) + ":" + grupo.nombre
 
         result = [{
             "data": data,

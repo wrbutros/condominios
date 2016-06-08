@@ -76,5 +76,21 @@
       "nombre": "Agua",
       "unidad_medida": "m3"
     }
+  },
+  {
+    "model": "registro.grupoGasto",
+    "pk": 1,
+    "fields": {
+      "nombre": "Gastos Comunes",
+      "activo": true
+    }
+  },
+  {
+    "model": "registro.grupoGasto",
+    "pk": 2,
+    "fields": {
+      "nombre": "Otro Grupo",
+      "activo": true
+    }
   }
 ]

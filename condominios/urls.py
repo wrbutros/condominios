@@ -24,6 +24,7 @@ from registro.views import PagoYAbonoSet, MultaEInteresSet, ContratoSet
 from registro.views import GrupoGastoSet, GlosaSet, RendicionSet
 from registro.views import ResidenteSet, ResidenteActualSet
 from registro.views import ContratoCondominioSet, LecturaServicioCondominioSet
+from registro.views import jqgrid
 
 from geoname.views import CiudadSet, ComunaSet
 
@@ -41,7 +42,7 @@ router.register(r'v1/condominios/(?P<id_condominio>.+)/contratos', ContratoCondo
 router.register(r'v1/condominios/(?P<id_condominio>.+)/lecturaServicioCondominio', LecturaServicioCondominioSet, 'lecturas')
 
 # NOTE: Manage the JQGrid CRUD
-router.register(r'v1/glosa/(?P<id_condominio>.+)/jqgrid', GlosaSet, 'glosa')
+#router.register(r'v1/glosa/(?P<id_condominio>.+)/jqgrid', GlosaSet, 'glosa')
 
 router.register(r'v1/edificios', EdificioSet, 'edificios')
 router.register(r'v1/departamentos', DepartamentoSet, 'departamentos')
@@ -61,4 +62,5 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^condominios/', include('registro.urls')),
+    url(r'v1/glosa/(?P<id_condominio>.+)/jqgrid/', jqgrid, name='glosa')
 ]
