@@ -38,11 +38,43 @@ def jqgrid(request, id_condominio):
     oper = request.POST['oper']
 
     if oper == "add":
-        return JsonResponse({'soyun': 'add'})
+        condominio = Condominio.objects.get(pk=id_condominio)
+        grupoGasto = GrupoGasto.objects.get(pk=request.POST['tipoGasto'])
+        glosa = Glosa (
+            nombre = request.POST['nombre'],
+            grupoGasto = grupoGasto,
+            condominio = condominio,
+            descripcion = request.POST['descripcion'],
+            nombreDocumentoOrig = request.POST['documento'],
+            fecha = datetime.now(),
+            ingreso = request.POST['ingreso'],
+            egreso = request.POST['egreso'])
+        glosa.save()
+
+        return JsonResponse({'action': oper,
+                             'status': 'ok'})
     elif oper == "edit":
-        return JsonResponse({'soyun': 'edit'})
+        condominio = Condominio.objects.get(pk=id_condominio)
+        grupoGasto = GrupoGasto.objects.get(pk=request.POST['tipoGasto'])
+
+        glosa = Glosa.objects.get(pk=request.POST['id'])
+        glosa.nombre = request.POST['nombre']
+        glosa.grupoGasto = grupoGasto
+        glosa.condominio = condominio
+        glosa.descripcion = request.POST['descripcion']
+        glosa.nombreDocumentoOrig = request.POST['documento']
+        glosa.fecha = datetime.now()
+        glosa.ingreso = request.POST['ingreso']
+        glosa.egreso = request.POST['egreso']
+        glosa.save()
+
+        return JsonResponse({'action': oper,
+                             'status': 'ok'})
     elif oper == "del":
-        return JsonResponse({'soyun': 'del'})
+        Glosa.objects.filter(pk=request.POST['id']).delete()
+
+        return JsonResponse({'action': oper,
+                             'status': 'ok'})
 
 
 class ConserjeSet(viewsets.ModelViewSet):
@@ -171,16 +203,6 @@ class GlosaSet(viewsets.ModelViewSet):
         condominio = Condominio.objects.filter(pk=id_condominio)
         return Glosa.objects.filter(condominio=condominio)
 
-    @detail_route(methods=['post'])
-    def set_queryset(self, request, pk=None):
-        id_condominio = self.kwargs['id_condominio']
-        condominio = Condominio.objects.filter(pk=id_condominio)
-
-        data = request.data
-        # id_grupo = request.data.grupoGasto
-        # grupoGasto = GrupoGasto.objects.filter(pk=id_condominio)
-        return Response({'status': 'OK'})
-
 
 class RendicionSet(mixins.CreateModelMixin,
                    mixins.ListModelMixin,
@@ -204,6 +226,7 @@ class RendicionSet(mixins.CreateModelMixin,
                 {
                     "id": str(glosa.id),
                     "tipoGasto": glosa.grupoGasto.nombre,
+                    "nombre": glosa.nombre,
                     "descripcion": glosa.descripcion,
                     "documento": glosa.nombreDocumentoOrig,
                     "ingreso": glosa.ingreso,
