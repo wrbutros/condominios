@@ -34,6 +34,24 @@ def index(request):
 
 
 @csrf_exempt
+def residenteForm(request, id_condominio):
+    residente = Residente (
+        rut = request.POST['rut'],
+        nombres = request.POST['nombres'],
+        apellido_paterno = request.POST['apellido_paterno'],
+        apellido_materno = request.POST['apellido_materno'],
+        genero = request.POST['genero'],
+        fono = request.POST['fono'],
+        email = request.POST['email'],
+        fecha_ingreso = request.POST['fecha_ingreso'],
+        activo = request.POST['activo'])
+
+    residente.save()
+    return JsonResponse({'action': 'add',
+                         'status': 'ok'})
+
+
+@csrf_exempt
 def jqgrid(request, id_condominio):
     oper = request.POST['oper']
 

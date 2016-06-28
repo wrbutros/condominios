@@ -24,7 +24,7 @@ from registro.views import PagoYAbonoSet, MultaEInteresSet, ContratoSet
 from registro.views import GrupoGastoSet, GlosaSet, RendicionSet
 from registro.views import ResidenteSet, ResidenteActualSet
 from registro.views import ContratoCondominioSet, LecturaServicioCondominioSet
-from registro.views import jqgrid
+from registro.views import jqgrid, residenteForm
 
 from geoname.views import CiudadSet, ComunaSet
 
@@ -62,5 +62,14 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^condominios/', include('registro.urls')),
-    url(r'v1/glosa/(?P<id_condominio>.+)/jqgrid/', jqgrid, name='glosa')
+
+    #CRUD Condominio con metodo tradicional
+    url(r'v1/glosa/(?P<id_condominio>.+)/jqgrid/', jqgrid, name='glosa'),
+
+    #CRUD Residentes, Contratos y Lecturas - TODO: Deberia usar REST
+    #NOTA: Esta es una implementacion temporal. "/set/" crea y modifica
+    url(r'v1/residente/set/', residenteForm, name='residenteForm')
+    #url(r'v1/residente/(?P<id_condominio>.+)/set/', residenteForm, name='residenteForm'),
+    #url(r'v1/contrato/(?P<id_condominio>.+)/set/', jqgrid, name='glosa'),
+    #url(r'v1/lectura/(?P<id_condominio>.+)/set/', jqgrid, name='glosa')
 ]
